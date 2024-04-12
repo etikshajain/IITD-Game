@@ -97,6 +97,29 @@ class Player(pygame.sprite.Sprite):
             self.status='left'
         else:
             self.direction.x = 0
+        
+        # yulu input
+        if keys[pygame.K_y]:
+            #check if you're at yulu stand
+            for sprite in self.obstacle_sprites:
+                if sprite.name=='yulu_stand':
+                    if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
+                        # print(self.rect.centerx, self.rect.centery)
+                        # print(sprite.rect.centerx, sprite.rect.centery)
+                        if(self.yulu==False):
+                            self.yulu=True
+                        return
+                    
+        if keys[pygame.K_t]:
+            #check if you're at yulu stand
+            for sprite in self.obstacle_sprites:
+                if sprite.name=='yulu_stand':
+                    if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
+                        # print(self.rect.centerx, self.rect.centery)
+                        # print(sprite.rect.centerx, sprite.rect.centery)
+                        if(self.yulu==True):
+                            self.yulu=False
+                        return
     
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
