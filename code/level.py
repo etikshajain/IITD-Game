@@ -2,10 +2,30 @@ from typing import Iterable
 import pygame
 from pygame.sprite import AbstractGroup 
 from settings import *
-from tile import Tile
 from player import Player
-from building import Building
 from road import Road
+from hostel import Hostel
+from yulu_stand import YuluStand
+from tree import Tree
+from bank import Bank
+from tennis import Tennis
+from cycle import Cycle
+from rajdhani import Rajdhani
+from sac import Sac
+from hospital import Hospital
+from football import Football
+from basketball import Basketball
+from racing import Racing
+from amul import Amul
+from bharti import Bharti
+from mainb import MainB
+from lhc import Lhc
+from biotech import Biotech
+from redsq import RedSq
+from lib import Lib
+from exhall import Exhall
+from shop import Shop
+from guesthouse import Guesthouse
 from debug import debug
 
 class Level:
@@ -27,16 +47,56 @@ class Level:
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
-                if col == 'x':
-                    Tile((x,y),[self.visible_sprites,self.obstacle_sprites])
                 if col == 'h':
                     Road((x,y),[self.visible_sprites],False)
                 if col == 'v':
                     Road((x,y),[self.visible_sprites],True)
+                if col == 'G':
+                    Hostel((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Y':
+                    YuluStand((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 't':
+                    Tree((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'T':
+                    Tennis((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'B':
+                    Bank((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'R':
+                    Rajdhani((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'C':
+                    Cycle((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'S':
+                    Sac((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'H':
+                    Hospital((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'F':
+                    Football((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Bb':
+                    Basketball((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Rr':
+                    Racing((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'A':
+                    Amul((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Cs':
+                    Bharti((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'M':
+                    MainB((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Lh':
+                    Lhc((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'Q':
+                    RedSq((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'P':
+                    Biotech((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'L':
+                    Lib((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'E':
+                    Exhall((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'I':
+                    Shop((x,y),[self.visible_sprites,self.obstacle_sprites])
+                if col == 'X':
+                    Guesthouse((x,y),[self.visible_sprites,self.obstacle_sprites])
                 if col == 'p':
                     self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites)
-                if col == 'b':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites])
 
     def run(self):
         # update and draw the game
