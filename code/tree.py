@@ -4,5 +4,6 @@ from settings import *
 class Tree(pygame.sprite.Sprite):
 	def __init__(self,pos,groups):
 		super().__init__(groups)
+		self.name = 'tree'
 		self.image = pygame.image.load('../graphics/tree/tree_50.jpg').convert_alpha()
 		self.rect = self.image.get_rect(topleft=pos)

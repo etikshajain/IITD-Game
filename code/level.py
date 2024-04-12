@@ -96,7 +96,7 @@ class Level:
                 if col == 'X':
                     Guesthouse((x,y),[self.visible_sprites,self.obstacle_sprites])
                 if col == 'p':
-                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites)
+                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites)
 
     def run(self):
         # update and draw the game

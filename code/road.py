@@ -4,6 +4,7 @@ from settings import *
 class Road(pygame.sprite.Sprite):
 	def __init__(self,pos,groups, dir):
 		super().__init__(groups)
+		self.name = 'road'
 		if dir:
 			self.image = pygame.image.load('../graphics/road/road_v_64.jpg').convert_alpha()
 		else:
