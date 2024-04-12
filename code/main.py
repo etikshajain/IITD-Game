@@ -21,7 +21,7 @@ class Game:
 					pygame.quit()
 					sys.exit()
 
-			self.screen.fill('green')
+			self.screen.fill('#9be650')
 			self.level.run()
 			pygame.display.update()
 			self.clock.tick(FPS)
