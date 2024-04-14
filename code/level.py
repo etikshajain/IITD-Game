@@ -27,6 +27,7 @@ from exhall import Exhall
 from shop import Shop
 from guesthouse import Guesthouse
 from dog import Dog
+from coin import Coin
 from ui import UI
 from debug import debug
 
@@ -103,8 +104,11 @@ class Level:
                 if col == 'D':
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
+                if col == 'c':
+                    Road((x,y),[self.visible_sprites],False)
+                    Coin((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'p':
-                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites)
+                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites)
 
     def run(self):
         # update and draw the game

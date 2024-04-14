@@ -1,6 +1,5 @@
 import pygame 
 from settings import *
-from helpers import import_folder, wave_value
 
 class Dog(pygame.sprite.Sprite):
     def __init__(self,pos,groups, visible_sprites):

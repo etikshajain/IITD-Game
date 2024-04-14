@@ -3,7 +3,7 @@ from settings import *
 from helpers import import_folder, wave_value
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups, obstacle_sprites, visible_sprites):
+    def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites):
         super().__init__(groups)
         self.name = 'player'
         self.image = pygame.image.load('../graphics/player/player_40.jpg').convert_alpha()
@@ -54,6 +54,7 @@ class Player(pygame.sprite.Sprite):
 
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
+        self.player_sprites = player_sprites
     
     def import_player_assets(self):
         character_path = '../graphics/player/'
@@ -198,10 +199,18 @@ class Player(pygame.sprite.Sprite):
             if sprite.name=='road':
                 if sprite.rect.colliderect(self.rect):
                     c+=1
+            # check dog hit
             if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
                 self.energy = max(0,self.energy-DOG_BITE_ENERGY)
                 self.dog_attack_time = pygame.time.get_ticks()
                 self.hurting=True
+            
+            # check coin hit
+            if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False:
+                self.stats['coins']+=COIN_VALUE
+                self.visible_sprites.remove(sprite)
+                self.player_sprites.remove(sprite)
+
 
         if c==0:
             self.grass=True
