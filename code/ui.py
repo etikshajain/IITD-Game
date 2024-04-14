@@ -46,7 +46,7 @@ class UI:
 
 	def display(self,player):
 		self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
-		self.show_coins(str(player.stats['coins']))
+		self.show_coins(str(player.coins))
 
-		self.show_text('Level:'+str(player.stats['level']), self.display_surface.get_size()[0] - 20, 40)
+		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40)
 		self.show_text('Yulu Bill:'+str(player.stats['yulu_bill']), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20)

@@ -4,36 +4,16 @@ from pygame.sprite import AbstractGroup
 from settings import *
 from player import Player
 from road import Road
-from hostel import Hostel
-from yulu_stand import YuluStand
-from tree import Tree
-from bank import Bank
-from tennis import Tennis
-from cycle import Cycle
-from rajdhani import Rajdhani
-from sac import Sac
-from hospital import Hospital
-from football import Football
-from basketball import Basketball
-from racing import Racing
-from amul import Amul
-from bharti import Bharti
-from mainb import MainB
-from lhc import Lhc
-from biotech import Biotech
-from redsq import RedSq
-from lib import Lib
-from exhall import Exhall
-from shop import Shop
-from guesthouse import Guesthouse
 from dog import Dog
 from coin import Coin
+from landmark import Landmark
+from building import Building
 from ui import UI
+import math
 from debug import debug
 
 class Level:
     def __init__(self):
-
         # get the display surface 
         self.display_surface = pygame.display.get_surface()
 
@@ -42,8 +22,14 @@ class Level:
         self.player_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
+        # player stats
+        self.coins=STARTING_COINS
+        self.level=1
+
         # sprite setup
         self.create_map()
+        self.place_random_dogs()
+        self.place_random_coins()
 
         #user interface
         self.ui = UI()
@@ -53,62 +39,74 @@ class Level:
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
+                # if col.isdigit():
+                #     Landmark((x,y),[self.visible_sprites,self.obstacle_sprites], HOSTELS[int(col)])
                 if col == 'h':
                     Road((x,y),[self.visible_sprites],False)
                 if col == 'v':
                     Road((x,y),[self.visible_sprites],True)
                 if col == 'G':
-                    Hostel((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hostel', '../graphics/hostel/hostell_192.jpg')
                 if col == 'Y':
-                    YuluStand((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'yulu_stand', '../graphics/buildings/yulu_64.jpg')
                 if col == 't':
-                    Tree((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tree', '../graphics/tree/tree_50.jpg')
                 if col == 'T':
-                    Tennis((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tennis', '../graphics/grounds/tennis.jpg')
                 if col == 'B':
-                    Bank((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bank', '../graphics/buildings/bank_128.jpg')
                 if col == 'R':
-                    Rajdhani((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'rajdhani', '../graphics/buildings/rajdhani.jpg')
                 if col == 'C':
-                    Cycle((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'cycle_shop', '../graphics/buildings/cycle.jpg')
                 if col == 'S':
-                    Sac((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'sac', '../graphics/buildings/sac.jpg')
                 if col == 'H':
-                    Hospital((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hospital', '../graphics/buildings/hospi.jpg')
                 if col == 'F':
-                    Football((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'football', '../graphics/grounds/football.jpg')
                 if col == 'Bb':
-                    Basketball((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'basketball', '../graphics/grounds/bb.jpg')
                 if col == 'Rr':
-                    Racing((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'racing', '../graphics/grounds/racing.jpg')
                 if col == 'A':
-                    Amul((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'amul', '../graphics/buildings/amul.jpg')
                 if col == 'Cs':
-                    Bharti((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bharti', '../graphics/buildings/bharti.jpg')
                 if col == 'M':
-                    MainB((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'main_building', '../graphics/buildings/main.jpg')
                 if col == 'Lh':
-                    Lhc((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lhc', '../graphics/buildings/lhc.jpg')
                 if col == 'Q':
-                    RedSq((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'red_square', '../graphics/buildings/parkk.jpg')
                 if col == 'P':
-                    Biotech((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'biotech', '../graphics/buildings/park.jpg')
                 if col == 'L':
-                    Lib((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lib', '../graphics/buildings/lib.jpg')
                 if col == 'E':
-                    Exhall((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'exhall', '../graphics/buildings/exhall.jpg')
                 if col == 'I':
-                    Shop((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'shop', '../graphics/buildings/shop.jpg')
                 if col == 'X':
-                    Guesthouse((x,y),[self.visible_sprites,self.obstacle_sprites])
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'guesthouse', '../graphics/buildings/guesthouse.jpg')
                 if col == 'D':
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'c':
                     Road((x,y),[self.visible_sprites],False)
-                    Coin((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
+                    Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':
-                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites)
+                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
+    
+    def place_random_dogs(self):
+        # possible dog positions
+        dog_count=5
+        vertical_road_positions =[]
+        horizontal_road_positions =[]
+        return
+
+    def place_random_coins(self):
+        return
 
     def run(self):
         # update and draw the game

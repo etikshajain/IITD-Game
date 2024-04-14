@@ -3,7 +3,7 @@ from settings import *
 from helpers import import_folder, wave_value
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites):
+    def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites, coins, level):
         super().__init__(groups)
         self.name = 'player'
         self.image = pygame.image.load('../graphics/player/player_40.jpg').convert_alpha()
@@ -40,9 +40,10 @@ class Player(pygame.sprite.Sprite):
         self.last_eating_time=None
 
         # stats
-        self.stats = {'energy':100, 'coins':500, 'level':1, 'yulu_bill':0}
+        self.stats = {'energy':100, 'yulu_bill':0}
+        self.coins=coins
         self.energy = 100
-        self.level = self.stats['level']
+        self.level = level
         self.speed = SPEED
         self.yulu_speed = YULU_SPEED
         self.grass_speed = GRASS_SPEED
@@ -137,7 +138,7 @@ class Player(pygame.sprite.Sprite):
             if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
                 if self.yulu==True:
                     self.yulu=False
-                    self.stats['coins']-=self.stats['yulu_bill']
+                    self.coins-=self.stats['yulu_bill']
                     self.stats['yulu_bill']=0
                     return
         
@@ -147,7 +148,7 @@ class Player(pygame.sprite.Sprite):
             if self.closest_sprite is not None and self.closest_sprite.name=='hospital':
                 self.last_eating_time = pygame.time.get_ticks()
                 self.eating=True
-                self.stats['coins'] = max(0,self.stats['coins']-int(HOSPITAL_FEES))
+                self.coins = max(0,self.coins-int(HOSPITAL_FEES))
                 self.energy=100
         
         # recharge energy from rajdhani/amul/shop
@@ -157,7 +158,7 @@ class Player(pygame.sprite.Sprite):
                 if self.closest_sprite.name=='rajdhani' or self.closest_sprite.name=='amul' or self.closest_sprite.name=='shop':
                     self.last_eating_time = pygame.time.get_ticks()
                     self.eating=True
-                    self.stats['coins'] = max(0,self.stats['coins']-int(FOOD_FEES))
+                    self.coins = max(0,self.coins-int(FOOD_FEES))
                     self.energy=min(100,self.energy+FOOD_ENERGY)
     
     def cooldowns(self):
@@ -207,7 +208,7 @@ class Player(pygame.sprite.Sprite):
             
             # check coin hit
             if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False:
-                self.stats['coins']+=COIN_VALUE
+                self.coins+=COIN_VALUE
                 self.visible_sprites.remove(sprite)
                 self.player_sprites.remove(sprite)
 
