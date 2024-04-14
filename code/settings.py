@@ -4,21 +4,41 @@ HEIGTH   = 848
 FPS      = 60
 TILESIZE = 64
 
+# player details
+SPEED=5
+ENERGY_RATE=0.01
+YULU_SPEED=8
+YULU_ENERGY_RATE=0.01
+GRASS_SPEED=2
+GRASS_ENERGY_RATE=0.01
+YULU_BILL=0.5
+STARTING_COINS=500
+
 # ui 
 BAR_HEIGHT = 20
 ENERGY_BAR_WIDTH = 200
 UI_FONT = '../graphics/font/joystix.ttf'
 UI_FONT_SIZE = 18
 
-# general colors
-WATER_COLOR = '#71ddee'
-UI_BG_COLOR = '#222222'
-UI_BORDER_COLOR = '#111111'
-TEXT_COLOR = '#EEEEEE'
-
 # ui colors
+TEXT_COLOR = '#EEEEEE'
 ENERGY_COLOR = 'red'
 UI_BORDER_COLOR_ACTIVE = 'gold'
+UI_BG_COLOR = '#222222'
+UI_BORDER_COLOR = '#111111'
+HIGHLIGHT_COLOR='yellow'
+CHECKPOINT_COLOR='blue'
+
+LEVELS = [    
+    {
+        'id':1,
+        'countdown':30,
+        'start':'hospital',
+        'end':'shop',
+        'story':'story',
+        'task':'task'
+    },
+]
 
 WORLD_MAP_1 = [
 ['t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t','t'],

@@ -33,13 +33,17 @@ class Player(pygame.sprite.Sprite):
         self.dog_attack_time = None
 
         # stats
-        self.stats = {'energy':100, 'coins':500, 'level':1, 'timer':1, 'speed':5, 'yulu_speed':8, 'grass_speed':2, 'yulu_bill':0}
+        self.stats = {'energy':100, 'coins':500, 'level':1, 'yulu_bill':0}
         self.energy = 100
         self.level = self.stats['level']
-        self.timer = self.stats['timer']
-        self.speed = self.stats['speed']
-        self.yulu_speed = self.stats['yulu_speed']
-        self.grass_speed = self.stats['grass_speed']
+        self.speed = SPEED
+        self.yulu_speed = YULU_SPEED
+        self.grass_speed = GRASS_SPEED
+
+        # level stats
+        self.starting_point = LEVELS[int(self.level)-1]['start']
+        self.ending_point = LEVELS[int(self.level)-1]['end']
+        self.countdown = LEVELS[int(self.level)-1]['countdown']
 
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
@@ -114,23 +118,19 @@ class Player(pygame.sprite.Sprite):
         # yulu input
         if keys[pygame.K_y]:
             #check if you're at yulu stand
-            for sprite in self.obstacle_sprites:
-                if sprite.name=='yulu_stand':
-                    if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
-                        if(self.yulu==False):
-                            self.yulu=True
-                        return
+            if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
+                if self.yulu==False:
+                    self.yulu=True
+                    return
                     
         if keys[pygame.K_t]:
             #check if you're at yulu stand
-            for sprite in self.obstacle_sprites:
-                if sprite.name=='yulu_stand':
-                    if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
-                        if(self.yulu==True):
-                            self.yulu=False
-                            self.stats['coins']-=self.stats['yulu_bill']
-                            self.stats['yulu_bill']=0
-                        return
+            if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
+                if self.yulu==True:
+                    self.yulu=False
+                    self.stats['coins']-=self.stats['yulu_bill']
+                    self.stats['yulu_bill']=0
+                    return
     
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -145,15 +145,15 @@ class Player(pygame.sprite.Sprite):
         
         if self.yulu:
             speed = self.yulu_speed
-            self.energy -= ((1/self.yulu_speed)/10)
-            self.stats['yulu_bill']+=0.5
+            self.energy -= YULU_ENERGY_RATE
+            self.stats['yulu_bill']+=YULU_BILL
             
         elif self.grass:
             speed = self.grass_speed
-            self.energy -= ((1/self.grass_speed)/10)
+            self.energy -= GRASS_ENERGY_RATE
         else:
             speed = self.speed
-            self.energy -= ((1/self.speed)/10)
+            self.energy -= ENERGY_RATE
         
         self.rect.x += self.direction.x * speed
         self.collision('horizontal')
@@ -161,7 +161,7 @@ class Player(pygame.sprite.Sprite):
         self.collision('vertical')
 
     def check_proximity(self):
-        # check for dog and grass collision
+        # check for dog and grass collision(visible sprite collisions)
         c=0
         for sprite in self.visible_sprites:
             if sprite.name=='road':
@@ -177,21 +177,34 @@ class Player(pygame.sprite.Sprite):
         else:
             self.grass=False
 
+        # offset
+        offset=pygame.math.Vector2()
+        offset.x = self.rect.centerx - self.half_width
+        offset.y = self.rect.centery - self.half_height
+
         sprite_ = None
         for sprite in self.obstacle_sprites:
-            if self.yulu==False and self.grass==False and sprite.name != "tree":
+            # highlight starting and end points of current level
+            if sprite.name == self.starting_point or sprite.name==self.ending_point:
+                rect_highligh = pygame.Rect(sprite.rect.x-offset.x,sprite.rect.y-offset.y,sprite.rect.width,sprite.rect.height)
+                pygame.draw.rect(self.display_surface,CHECKPOINT_COLOR,rect_highligh,5)
+
+            # check if the sprite is near the player
+            if self.grass==False and sprite.name != "tree":
                 if abs(self.rect.centerx-sprite.rect.centerx)<=150 and abs(self.rect.centery-sprite.rect.centery)<=150:
-                    sprite_ = sprite
+                    if self.yulu==False:
+                        sprite_ = sprite
+                    else:
+                        if sprite.name=='yulu_stand':
+                            sprite_=sprite
         
         self.closest_sprite = sprite_
         
         # highlight the closest sprite
         if sprite_ is not None:
-            offset=pygame.math.Vector2()
-            offset.x = self.rect.centerx - self.half_width
-            offset.y = self.rect.centery - self.half_height
+            self.closest_sprite = sprite_
             rect_highligh = pygame.Rect(sprite_.rect.x-offset.x,sprite_.rect.y-offset.y,sprite_.rect.width,sprite_.rect.height)
-            pygame.draw.rect(self.display_surface,'black',rect_highligh,10)
+            pygame.draw.rect(self.display_surface,HIGHLIGHT_COLOR,rect_highligh,5)
 
     def collision(self,direction):
         if direction == 'horizontal':
@@ -211,10 +224,10 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
 
     def update(self):
+        self.check_proximity()
         self.input()
         self.cooldowns()
         self.get_status()
         self.animate()
-        self.check_proximity()
         self.move()
 	
