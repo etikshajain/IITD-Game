@@ -28,9 +28,16 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.yulu = False
         self.grass=False
+
+        # dog cooldowns
         self.hurting = False # due to dog hit
         self.dog_attack_cooldown = 4000
         self.dog_attack_time = None
+
+        #eating cooldown
+        self.eating=False
+        self.eating_cooldown=4000
+        self.last_eating_time=None
 
         # stats
         self.stats = {'energy':100, 'coins':500, 'level':1, 'yulu_bill':0}
@@ -115,14 +122,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
         
-        # yulu input
+        # get pn yulu
         if keys[pygame.K_y]:
             #check if you're at yulu stand
             if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
                 if self.yulu==False:
                     self.yulu=True
                     return
-                    
+
+        # get off yulu        
         if keys[pygame.K_t]:
             #check if you're at yulu stand
             if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
@@ -131,6 +139,25 @@ class Player(pygame.sprite.Sprite):
                     self.stats['coins']-=self.stats['yulu_bill']
                     self.stats['yulu_bill']=0
                     return
+        
+        # recharge energy from hospital
+        if keys[pygame.K_h] and self.eating==False:
+            #check if you're at yulu stand
+            if self.closest_sprite is not None and self.closest_sprite.name=='hospital':
+                self.last_eating_time = pygame.time.get_ticks()
+                self.eating=True
+                self.stats['coins'] = max(0,self.stats['coins']-int(HOSPITAL_FEES))
+                self.energy=100
+        
+        # recharge energy from rajdhani/amul/shop
+        if keys[pygame.K_f] and self.eating==False:
+            #check if you're at food stall
+            if self.closest_sprite is not None:
+                if self.closest_sprite.name=='rajdhani' or self.closest_sprite.name=='amul' or self.closest_sprite.name=='shop':
+                    self.last_eating_time = pygame.time.get_ticks()
+                    self.eating=True
+                    self.stats['coins'] = max(0,self.stats['coins']-int(FOOD_FEES))
+                    self.energy=min(100,self.energy+FOOD_ENERGY)
     
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -138,6 +165,10 @@ class Player(pygame.sprite.Sprite):
         if self.hurting:
             if current_time-self.dog_attack_time >= self.dog_attack_cooldown:
                 self.hurting = False
+        
+        if self.eating:
+            if current_time-self.last_eating_time >= self.eating_cooldown:
+                self.eating = False
 
     def move(self):
         if self.direction.magnitude() != 0:
@@ -145,15 +176,15 @@ class Player(pygame.sprite.Sprite):
         
         if self.yulu:
             speed = self.yulu_speed
-            self.energy -= YULU_ENERGY_RATE
+            self.energy = max(0,self.energy-YULU_ENERGY_RATE)
             self.stats['yulu_bill']+=YULU_BILL
             
         elif self.grass:
             speed = self.grass_speed
-            self.energy -= GRASS_ENERGY_RATE
+            self.energy = max(0,self.energy-GRASS_ENERGY_RATE)
         else:
             speed = self.speed
-            self.energy -= ENERGY_RATE
+            self.energy = max(0,self.energy-ENERGY_RATE)
         
         self.rect.x += self.direction.x * speed
         self.collision('horizontal')
@@ -168,7 +199,7 @@ class Player(pygame.sprite.Sprite):
                 if sprite.rect.colliderect(self.rect):
                     c+=1
             if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
-                self.energy -= 5
+                self.energy = max(0,self.energy-DOG_BITE_ENERGY)
                 self.dog_attack_time = pygame.time.get_ticks()
                 self.hurting=True
 
