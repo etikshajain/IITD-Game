@@ -8,9 +8,15 @@ class Player(pygame.sprite.Sprite):
         self.name = 'player'
         self.image = pygame.image.load('../graphics/player/player_40.jpg').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
+        self.display_surface = pygame.display.get_surface()
+        self.half_width = self.display_surface.get_size()[0] // 2
+        self.half_height = self.display_surface.get_size()[1] // 2
 
         #TODO: coin collision
         #TODO: dog collision
+
+        # closest obstacle sprite
+        self.closest_sprite = None
 
         # graphics setup
         self.import_player_assets()
@@ -136,28 +142,25 @@ class Player(pygame.sprite.Sprite):
     def move(self):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
-
+        
         if self.yulu:
-            self.rect.x += self.direction.x * self.yulu_speed
-            self.collision('horizontal')
-            self.rect.y += self.direction.y * self.yulu_speed
-            self.collision('vertical')
+            speed = self.yulu_speed
             self.energy -= ((1/self.yulu_speed)/10)
             self.stats['yulu_bill']+=0.5
+            
         elif self.grass:
-            self.rect.x += self.direction.x * self.grass_speed
-            self.collision('horizontal')
-            self.rect.y += self.direction.y * self.grass_speed
-            self.collision('vertical')
+            speed = self.grass_speed
             self.energy -= ((1/self.grass_speed)/10)
         else:
-            self.rect.x += self.direction.x * self.speed
-            self.collision('horizontal')
-            self.rect.y += self.direction.y * self.speed
-            self.collision('vertical')
+            speed = self.speed
             self.energy -= ((1/self.speed)/10)
+        
+        self.rect.x += self.direction.x * speed
+        self.collision('horizontal')
+        self.rect.y += self.direction.y * speed
+        self.collision('vertical')
 
-    def collision(self,direction):
+    def check_proximity(self):
         # check for dog and grass collision
         c=0
         for sprite in self.visible_sprites:
@@ -174,6 +177,23 @@ class Player(pygame.sprite.Sprite):
         else:
             self.grass=False
 
+        sprite_ = None
+        for sprite in self.obstacle_sprites:
+            if self.yulu==False and self.grass==False and sprite.name != "tree":
+                if abs(self.rect.centerx-sprite.rect.centerx)<=150 and abs(self.rect.centery-sprite.rect.centery)<=150:
+                    sprite_ = sprite
+        
+        self.closest_sprite = sprite_
+        
+        # highlight the closest sprite
+        if sprite_ is not None:
+            offset=pygame.math.Vector2()
+            offset.x = self.rect.centerx - self.half_width
+            offset.y = self.rect.centery - self.half_height
+            rect_highligh = pygame.Rect(sprite_.rect.x-offset.x,sprite_.rect.y-offset.y,sprite_.rect.width,sprite_.rect.height)
+            pygame.draw.rect(self.display_surface,'black',rect_highligh,10)
+
+    def collision(self,direction):
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.rect):
@@ -195,5 +215,6 @@ class Player(pygame.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
+        self.check_proximity()
         self.move()
 	
