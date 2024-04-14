@@ -20,11 +20,21 @@ class Player(pygame.sprite.Sprite):
 
         #movement 
         self.direction = pygame.math.Vector2()
-        self.speed = 5
         self.yulu = False
+        self.grass=False
         self.hurting = False # due to dog hit
         self.dog_attack_cooldown = 4000
         self.dog_attack_time = None
+
+        # stats
+        self.stats = {'energy':100, 'coins':0, 'level':1, 'timer':1, 'speed':5, 'yulu_speed':8, 'grass_speed':2}
+        self.energy = 80
+        self.coins = self.stats['coins']
+        self.level = self.stats['level']
+        self.timer = self.stats['timer']
+        self.speed = self.stats['speed']
+        self.yulu_speed = self.stats['yulu_speed']
+        self.grass_speed = self.stats['grass_speed']
 
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
@@ -46,8 +56,6 @@ class Player(pygame.sprite.Sprite):
                 self.status = self.status + '_idle'
 
         if self.yulu:
-            # self.direction.x = 0
-            # self.direction.y = 0
             if not 'yulu' in self.status:
                 if 'idle' in self.status:
                     self.status = self.status.replace('_idle','_yulu')
@@ -104,8 +112,6 @@ class Player(pygame.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 if sprite.name=='yulu_stand':
                     if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
-                        # print(self.rect.centerx, self.rect.centery)
-                        # print(sprite.rect.centerx, sprite.rect.centery)
                         if(self.yulu==False):
                             self.yulu=True
                         return
@@ -115,8 +121,6 @@ class Player(pygame.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 if sprite.name=='yulu_stand':
                     if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
-                        # print(self.rect.centerx, self.rect.centery)
-                        # print(sprite.rect.centerx, sprite.rect.centery)
                         if(self.yulu==True):
                             self.yulu=False
                         return
@@ -128,16 +132,42 @@ class Player(pygame.sprite.Sprite):
             if current_time-self.dog_attack_time >= self.dog_attack_cooldown:
                 self.hurting = False
 
-    def move(self,speed):
+    def move(self):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
-        self.rect.x += self.direction.x * speed
-        self.collision('horizontal')
-        self.rect.y += self.direction.y * speed
-        self.collision('vertical')
+        if self.yulu:
+            self.rect.x += self.direction.x * self.yulu_speed
+            self.collision('horizontal')
+            self.rect.y += self.direction.y * self.yulu_speed
+            self.collision('vertical')
+            self.energy -= ((1/self.yulu_speed)/10)
+        elif self.grass:
+            self.rect.x += self.direction.x * self.grass_speed
+            self.collision('horizontal')
+            self.rect.y += self.direction.y * self.grass_speed
+            self.collision('vertical')
+            self.energy -= ((1/self.grass_speed)/10)
+        else:
+            self.rect.x += self.direction.x * self.speed
+            self.collision('horizontal')
+            self.rect.y += self.direction.y * self.speed
+            self.collision('vertical')
+            self.energy -= ((1/self.speed)/10)
 
     def collision(self,direction):
+        # check for dog and grass collision
+        for sprite in self.visible_sprites:
+            # if sprite.name=='road':
+            #     if sprite.rect.colliderect(self.rect):
+            #         self.grass=False
+            #     else:
+            #         self.grass=True
+            if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
+                self.energy -= 5
+                self.dog_attack_time = pygame.time.get_ticks()
+                self.hurting=True
+
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.rect):
@@ -153,17 +183,11 @@ class Player(pygame.sprite.Sprite):
                         self.rect.bottom = sprite.rect.top
                     if self.direction.y < 0: # moving up
                         self.rect.top = sprite.rect.bottom
-        
-        # check for dog collision
-        for sprite in self.visible_sprites:
-            if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
-                self.dog_attack_time = pygame.time.get_ticks()
-                self.hurting=True
 
     def update(self):
         self.input()
         self.cooldowns()
         self.get_status()
         self.animate()
-        self.move(self.speed)
+        self.move()
 	

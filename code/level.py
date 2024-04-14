@@ -26,6 +26,7 @@ from lib import Lib
 from exhall import Exhall
 from shop import Shop
 from guesthouse import Guesthouse
+from ui import UI
 from debug import debug
 
 class Level:
@@ -41,6 +42,9 @@ class Level:
 
         # sprite setup
         self.create_map()
+
+        #user interface
+        self.ui = UI()
 
     def create_map(self):
         for row_index,row in enumerate(WORLD_MAP):
@@ -103,6 +107,7 @@ class Level:
         self.visible_sprites.custom_draw(self.player)
         self.player_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.ui.display(self.player)
         
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
