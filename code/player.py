@@ -243,6 +243,7 @@ class Player(pygame.sprite.Sprite):
         
         # highlight the closest sprite
         if sprite_ is not None:
+            print(sprite_.name)
             self.closest_sprite = sprite_
             rect_highligh = pygame.Rect(sprite_.rect.x-offset.x,sprite_.rect.y-offset.y,sprite_.rect.width,sprite_.rect.height)
             pygame.draw.rect(self.display_surface,HIGHLIGHT_COLOR,rect_highligh,5)

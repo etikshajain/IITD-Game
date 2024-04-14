@@ -45,8 +45,8 @@ class Level:
                     Road((x,y),[self.visible_sprites],False)
                 if col == 'v':
                     Road((x,y),[self.visible_sprites],True)
-                if col == 'G':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hostel', '../graphics/hostel/hostell_192.jpg')
+                if col[0] == 'G':
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hostel'+str(col[1:]), '../graphics/hostel/hostell_192.jpg')
                 if col == 'Y':
                     Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'yulu_stand', '../graphics/buildings/yulu_64.jpg')
                 if col == 't':
