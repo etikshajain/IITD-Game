@@ -9,8 +9,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load('../graphics/player/player_40.jpg').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
 
-        #TODO: parameters
         #TODO: coin collision
+        #TODO: dog collision
 
         # graphics setup
         self.import_player_assets()
@@ -157,16 +157,20 @@ class Player(pygame.sprite.Sprite):
 
     def collision(self,direction):
         # check for dog and grass collision
+        c=0
         for sprite in self.visible_sprites:
-            # if sprite.name=='road':
-            #     if sprite.rect.colliderect(self.rect):
-            #         self.grass=False
-            #     else:
-            #         self.grass=True
+            if sprite.name=='road':
+                if sprite.rect.colliderect(self.rect):
+                    c+=1
             if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
                 self.energy -= 5
                 self.dog_attack_time = pygame.time.get_ticks()
                 self.hurting=True
+
+        if c==0:
+            self.grass=True
+        else:
+            self.grass=False
 
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
