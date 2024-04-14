@@ -27,9 +27,8 @@ class Player(pygame.sprite.Sprite):
         self.dog_attack_time = None
 
         # stats
-        self.stats = {'energy':100, 'coins':0, 'level':1, 'timer':1, 'speed':5, 'yulu_speed':8, 'grass_speed':2}
-        self.energy = 80
-        self.coins = self.stats['coins']
+        self.stats = {'energy':100, 'coins':500, 'level':1, 'timer':1, 'speed':5, 'yulu_speed':8, 'grass_speed':2, 'yulu_bill':0}
+        self.energy = 100
         self.level = self.stats['level']
         self.timer = self.stats['timer']
         self.speed = self.stats['speed']
@@ -123,6 +122,8 @@ class Player(pygame.sprite.Sprite):
                     if abs(self.rect.centerx-sprite.rect.centerx)<=100 and abs(self.rect.centery-sprite.rect.centery)<=100:
                         if(self.yulu==True):
                             self.yulu=False
+                            self.stats['coins']-=self.stats['yulu_bill']
+                            self.stats['yulu_bill']=0
                         return
     
     def cooldowns(self):
@@ -142,6 +143,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.direction.y * self.yulu_speed
             self.collision('vertical')
             self.energy -= ((1/self.yulu_speed)/10)
+            self.stats['yulu_bill']+=0.5
         elif self.grass:
             self.rect.x += self.direction.x * self.grass_speed
             self.collision('horizontal')
