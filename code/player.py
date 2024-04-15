@@ -267,7 +267,14 @@ class Player(pygame.sprite.Sprite):
 
             # check if the sprite is near the player
             if self.grass==False and sprite.name != "tree":
-                if abs(self.rect.centerx-sprite.rect.centerx)<=150 and abs(self.rect.centery-sprite.rect.centery)<=150:
+                # check if the distance is <= 50px
+                x1,y1 = self.rect.center
+                d1 = max(self.rect.width,self.rect.height)
+                x2,y2 = sprite.rect.center
+                d2 = max(sprite.rect.width,sprite.rect.height)
+                d3 = (((x1-x2)**2)+((y1-y2)**2))**0.5
+                if d3<=(d1+d2)//2 + 20:
+                # if abs(self.rect.centerx-sprite.rect.centerx)<=150 and abs(self.rect.centery-sprite.rect.centery)<=150:
                     if self.yulu==False:
                         sprite_ = sprite
                     else:
