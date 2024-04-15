@@ -46,7 +46,9 @@ LEVELS = [
         'start':'hospital',
         'end':'amul',
         'story':'story',
-        'task':'task'
+        'task':'task',
+        'first_message_on_top':'Go to the Hospital',
+        'second_message_on_top':'Go to Amul'
     },
     {
         'id':2,
@@ -54,7 +56,9 @@ LEVELS = [
         'start':'hostel1',
         'end':'shop',
         'story':'story',
-        'task':'task'
+        'task':'task',
+        'first_message_on_top':'Go to Hostel 1',
+        'second_message_on_top':'Go to the Shop'
     },
 ]
 

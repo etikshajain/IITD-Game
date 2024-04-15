@@ -104,7 +104,7 @@ class Level:
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'c':
-                    Road((x,y),[self.visible_sprites],False)
+                    Road((x,y),[self.visible_sprites],True)
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':
                     self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
