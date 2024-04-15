@@ -200,6 +200,7 @@ class Player(pygame.sprite.Sprite):
             #check if you're at end point
             if self.closest_sprite is not None:
                 if self.closest_sprite.name==self.ending_point and self.started==True:
+                    self.coins+=LEVELS[self.level-1]['points']
                     self.completed=True
                     self.playing=False
         

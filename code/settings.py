@@ -43,6 +43,7 @@ LEVELS = [
     {
         'id':1,
         'countdown':30,
+        'points':200,
         'start':'hospital',
         'end':'amul',
         'story':'story',
@@ -53,6 +54,7 @@ LEVELS = [
     {
         'id':2,
         'countdown':30,
+        'points':200,
         'start':'hostel1',
         'end':'shop',
         'story':'story',
