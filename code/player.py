@@ -56,6 +56,13 @@ class Player(pygame.sprite.Sprite):
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
         self.player_sprites = player_sprites
+
+        # game status - running, paused, failed, completed
+        self.playing=False
+        self.started=False
+        self.pause=False
+        self.failed=False
+        self.completed=False
     
     def import_player_assets(self):
         character_path = '../graphics/player/'
@@ -66,6 +73,13 @@ class Player(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
+    
+    def check_game_status(self):
+        if self.energy==0 or self.coins<0 or self.stats['yulu_bill']>self.coins:
+            self.failed=True
+            self.playing=False
+            return
+        
     
     def get_status(self):
         # idle status
@@ -160,6 +174,25 @@ class Player(pygame.sprite.Sprite):
                     self.eating=True
                     self.coins = max(0,self.coins-int(FOOD_FEES))
                     self.energy=min(100,self.energy+FOOD_ENERGY)
+
+        # reach starting point
+        if keys[pygame.K_SPACE]:
+            #check if you're at starting point
+            if self.closest_sprite is not None:
+                if self.closest_sprite.name==self.starting_point and self.started==False:
+                    self.started=True
+        # reach end point
+        if keys[pygame.K_SPACE]:
+            #check if you're at end point
+            if self.closest_sprite is not None:
+                if self.closest_sprite.name==self.ending_point and self.started==True:
+                    self.completed=True
+                    self.playing=False
+        
+        # pause the game
+        if keys[pygame.K_ESCAPE]:
+            self.pause=True
+            self.playing=False
     
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -226,7 +259,10 @@ class Player(pygame.sprite.Sprite):
         sprite_ = None
         for sprite in self.obstacle_sprites:
             # highlight starting and end points of current level
-            if sprite.name == self.starting_point or sprite.name==self.ending_point:
+            if sprite.name == self.starting_point and self.started==False:
+                rect_highligh = pygame.Rect(sprite.rect.x-offset.x,sprite.rect.y-offset.y,sprite.rect.width,sprite.rect.height)
+                pygame.draw.rect(self.display_surface,CHECKPOINT_COLOR,rect_highligh,5)
+            if sprite.name==self.ending_point:
                 rect_highligh = pygame.Rect(sprite.rect.x-offset.x,sprite.rect.y-offset.y,sprite.rect.width,sprite.rect.height)
                 pygame.draw.rect(self.display_surface,CHECKPOINT_COLOR,rect_highligh,5)
 
@@ -243,7 +279,6 @@ class Player(pygame.sprite.Sprite):
         
         # highlight the closest sprite
         if sprite_ is not None:
-            print(sprite_.name)
             self.closest_sprite = sprite_
             rect_highligh = pygame.Rect(sprite_.rect.x-offset.x,sprite_.rect.y-offset.y,sprite_.rect.width,sprite_.rect.height)
             pygame.draw.rect(self.display_surface,HIGHLIGHT_COLOR,rect_highligh,5)
@@ -266,10 +301,12 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
 
     def update(self):
-        self.check_proximity()
-        self.input()
-        self.cooldowns()
-        self.get_status()
-        self.animate()
-        self.move()
+        self.check_game_status()
+        if self.playing:
+            self.check_proximity()
+            self.input()
+            self.cooldowns()
+            self.get_status()
+            self.animate()
+            self.move()
 	

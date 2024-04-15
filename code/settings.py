@@ -44,7 +44,7 @@ LEVELS = [
         'id':1,
         'countdown':30,
         'start':'hospital',
-        'end':'shop',
+        'end':'amul',
         'story':'story',
         'task':'task'
     },

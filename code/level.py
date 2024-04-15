@@ -31,6 +31,11 @@ class Level:
         self.place_random_dogs()
         self.place_random_coins()
 
+        # game status
+        self.playing=False
+        # self.end=False
+        # self.pause=False
+
         #user interface
         self.ui = UI()
 
@@ -107,13 +112,40 @@ class Level:
 
     def place_random_coins(self):
         return
+    
+    def input(self):
+        keys = pygame.key.get_pressed()
+
+        # start game
+        if keys[pygame.K_RSHIFT]:
+            if self.playing==False:
+                self.playing=True
+                self.player.playing=True
+        if keys[pygame.K_LSHIFT]:
+            if self.player.pause==True:
+                self.player.pause=False
+                self.player.playing=True
 
     def run(self):
-        # update and draw the game
-        self.visible_sprites.custom_draw(self.player)
-        self.player_sprites.custom_draw(self.player)
-        self.visible_sprites.update()
-        self.ui.display(self.player)
+        self.input()
+        if self.playing==False:
+            print("show start screen")
+            # start button
+        elif self.player.completed:
+            print("show completed screen")
+            # restart/quit/move to next level button
+        elif self.player.failed:
+            print("show failed screen")
+            # restart/quit button
+        elif self.player.pause:
+            print("show pause screen")
+            # resume/restart/quit button
+        elif self.player.playing:
+            # update and draw the game
+            self.visible_sprites.custom_draw(self.player)
+            self.player_sprites.custom_draw(self.player)
+            self.visible_sprites.update()
+            self.ui.display(self.player)
         
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
