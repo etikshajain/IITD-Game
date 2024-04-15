@@ -64,6 +64,20 @@ class Player(pygame.sprite.Sprite):
         self.failed=False
         self.completed=False
     
+    # def reset_states(self):
+    #     self.energy=100
+    #     self.stats['yulu_bill']=0
+    #     self.playing=False
+    #     self.started=False
+    #     self.pause=False
+    #     self.failed=False
+    #     self.completed=False
+    #     self.dog_attack_time = None
+    #     self.last_eating_time=None
+    #     self.eating=False
+    #     self.hurting=False
+    #     self.closest_sprite=None
+    
     def import_player_assets(self):
         character_path = '../graphics/player/'
         self.animations = {'up': [],'down': [],'left': [],'right': [],

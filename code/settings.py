@@ -48,6 +48,14 @@ LEVELS = [
         'story':'story',
         'task':'task'
     },
+    {
+        'id':2,
+        'countdown':30,
+        'start':'hostel1',
+        'end':'shop',
+        'story':'story',
+        'task':'task'
+    },
 ]
 
 HOSTELS = {

@@ -9,7 +9,8 @@ from coin import Coin
 from landmark import Landmark
 from building import Building
 from ui import UI
-import math
+from button import Button
+import sys
 from debug import debug
 
 class Level:
@@ -33,8 +34,13 @@ class Level:
 
         # game status
         self.playing=False
-        # self.end=False
-        # self.pause=False
+
+        #button
+        self.start_button = Button(WIDTH//2, 300, 200, 50, "Start", 'black', self.start_game)
+        self.restart_button = Button(WIDTH//2, 300, 200, 50, "Restart", 'black', self.restart_game)
+        self.quit_button = Button(WIDTH//2, 400, 200, 50, "Quit", 'black', self.quit_game)
+        self.next_level_button = Button(WIDTH//2, 300, 300, 50, "Next Level", 'black', self.next_level_game)
+        self.resume_button = Button(WIDTH//2, 500, 200, 50, "Resume", 'black', self.resume_game)
 
         #user interface
         self.ui = UI()
@@ -113,39 +119,98 @@ class Level:
     def place_random_coins(self):
         return
     
-    def input(self):
-        keys = pygame.key.get_pressed()
+    # def input(self):
+    #     keys = pygame.key.get_pressed()
 
-        # start game
-        if keys[pygame.K_RSHIFT]:
-            if self.playing==False:
-                self.playing=True
-                self.player.playing=True
-        if keys[pygame.K_LSHIFT]:
-            if self.player.pause==True:
-                self.player.pause=False
-                self.player.playing=True
+    #     # start game
+    #     if keys[pygame.K_RSHIFT]:
+    #         if self.playing==False:
+    #             self.playing=True
+    #             self.player.playing=True
+    #     if keys[pygame.K_LSHIFT]:
+    #         if self.player.pause==True:
+    #             self.player.pause=False
+    #             self.player.playing=True
+
+    def display_text(self, text):
+        text_surf = pygame.font.Font(UI_FONT,30).render(str((text)),False,'black')
+        text_rect = text_surf.get_rect(center = (WIDTH/2,200))
+        # pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+        self.display_surface.blit(text_surf,text_rect)
+        # pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 
     def run(self):
-        self.input()
+        # self.input()
         if self.playing==False:
-            print("show start screen")
-            # start button
+            # start screen
+            self.display_text(f'Welcome to Level:{self.level}')
+            self.start_button.draw()
+
         elif self.player.completed:
-            print("show completed screen")
-            # restart/quit/move to next level button
+            # print("show completed screen")
+            self.display_text(f'Wohooo!! Mission Complete!!')
+            self.next_level_button.draw()
+            self.quit_button.draw()
+
         elif self.player.failed:
-            print("show failed screen")
-            # restart/quit button
+            #print("show failed screen")
+            self.display_text(f'UhOhhhh!! Mission Failed!!')
+            self.restart_button.draw()
+            self.quit_button.draw()
+
         elif self.player.pause:
-            print("show pause screen")
-            # resume/restart/quit button
+            # print("show pause screen")
+            self.display_text(f'Game Paused')
+            self.restart_button.draw()
+            self.resume_button.draw()
+            self.quit_button.draw()
+
         elif self.player.playing:
             # update and draw the game
             self.visible_sprites.custom_draw(self.player)
             self.player_sprites.custom_draw(self.player)
             self.visible_sprites.update()
             self.ui.display(self.player)
+
+    
+    def start_game(self):
+        self.playing=True
+        self.player.playing=True
+    
+    def restart_game(self):
+        self.coins=STARTING_COINS
+        self.level=1
+        self.playing=False
+        # sprite setup
+        self.visible_sprites = YSortCameraGroup()
+        self.player_sprites = YSortCameraGroup()
+        self.obstacle_sprites = pygame.sprite.Group()
+        self.create_map()
+        self.place_random_dogs()
+        self.place_random_coins()
+        
+    
+    def quit_game(self):
+        pygame.quit()
+        sys.exit()
+    
+    def next_level_game(self):
+        self.level+=1
+        self.coins=self.player.coins
+        self.playing=False
+        # sprite setup
+        self.visible_sprites = YSortCameraGroup()
+        self.player_sprites = YSortCameraGroup()
+        self.obstacle_sprites = pygame.sprite.Group()
+        self.create_map()
+        self.place_random_dogs()
+        self.place_random_coins()
+        return
+    
+    def resume_game(self):
+        self.player.playing=True
+        self.player.pause=False
+
         
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
