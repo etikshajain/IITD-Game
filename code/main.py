@@ -17,6 +17,22 @@ class Game:
 	def run(self):
 		while True:
 			for event in pygame.event.get():
+				if self.level.playing==False:
+					self.level.start_button.handle_event(event)
+
+				elif self.level.player.completed:
+					self.level.next_level_button.handle_event(event)
+					self.level.quit_button.handle_event(event)
+
+				elif self.level.player.failed:
+					self.level.restart_button.handle_event(event)
+					self.level.quit_button.handle_event(event)
+
+				elif self.level.player.pause:
+					self.level.restart_button.handle_event(event)
+					self.level.resume_button.handle_event(event)
+					self.level.quit_button.handle_event(event)
+
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
