@@ -49,6 +49,7 @@ class UI:
 		self.show_coins(str(player.coins))
 
 		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40)
+		self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90)
 		self.show_text('Yulu Bill:'+str(player.stats['yulu_bill']), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20)
 		if player.started==False:
 			self.show_text(str(LEVELS[int(player.level)-1]['first_message_on_top']), WIDTH//2, 40)

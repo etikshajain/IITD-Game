@@ -12,9 +12,6 @@ class Player(pygame.sprite.Sprite):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
 
-        #TODO: coin collision
-        #TODO: dog collision
-
         # closest obstacle sprite
         self.closest_sprite = None
 
@@ -52,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         self.starting_point = LEVELS[int(self.level)-1]['start']
         self.ending_point = LEVELS[int(self.level)-1]['end']
         self.countdown = LEVELS[int(self.level)-1]['countdown']
+        self.timer = self.countdown
 
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
@@ -64,20 +62,6 @@ class Player(pygame.sprite.Sprite):
         self.failed=False
         self.completed=False
     
-    # def reset_states(self):
-    #     self.energy=100
-    #     self.stats['yulu_bill']=0
-    #     self.playing=False
-    #     self.started=False
-    #     self.pause=False
-    #     self.failed=False
-    #     self.completed=False
-    #     self.dog_attack_time = None
-    #     self.last_eating_time=None
-    #     self.eating=False
-    #     self.hurting=False
-    #     self.closest_sprite=None
-    
     def import_player_assets(self):
         character_path = '../graphics/player/'
         self.animations = {'up': [],'down': [],'left': [],'right': [],
@@ -89,7 +73,7 @@ class Player(pygame.sprite.Sprite):
             self.animations[animation] = import_folder(full_path)
     
     def check_game_status(self):
-        if self.energy==0 or self.coins<0 or self.stats['yulu_bill']>self.coins:
+        if self.energy==0 or self.coins<0 or self.stats['yulu_bill']>self.coins or self.timer<=0:
             self.failed=True
             self.playing=False
             return
@@ -318,6 +302,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.check_game_status()
         if self.playing:
+            if self.started:
+                self.timer-=1
             self.check_proximity()
             self.input()
             self.cooldowns()

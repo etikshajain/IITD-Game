@@ -42,7 +42,7 @@ CHECKPOINT_COLOR='blue'
 LEVELS = [    
     {
         'id':1,
-        'countdown':30,
+        'countdown':3000,
         'points':200,
         'start':'hospital',
         'end':'amul',
@@ -53,7 +53,7 @@ LEVELS = [
     },
     {
         'id':2,
-        'countdown':30,
+        'countdown':3000,
         'points':200,
         'start':'hostel1',
         'end':'shop',
