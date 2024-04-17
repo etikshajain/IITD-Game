@@ -1,6 +1,7 @@
 import pygame
 from pygame import mixer
 from server.network import Network
+from main2 import Game
 from config.main import *
 from config.fighter import SWORD_DAMAGE
 
@@ -71,8 +72,15 @@ else:
   p1_animation_list = load_images(samura2_sheet,SAMURAI2_ANIMATION_LIST)
   p2_animation_list = load_images(samura1_sheet,SAMURAI1_ANIMATION_LIST)
 
+
+game = Game()
+
+
 while run:
   clock.tick(FPS)
+
+
+
   draw_bg()
 
   fighter_2 = n.send(fighter_1) # send data to server

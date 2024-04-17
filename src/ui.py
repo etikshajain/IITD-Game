@@ -45,7 +45,7 @@ class UI:
 		text_rect = text_surf.get_rect(topleft = (x,y))
 		self.display_surface.blit(text_surf,text_rect)
 
-	def display(self,player):
+	def display(self,player, timer):
 		if player.energy<=ENERGY_BLINK_THRESHOLD:
 			if wave_value()>0:
 				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
@@ -57,13 +57,7 @@ class UI:
 		self.show_coins(str(round(player.coins,0)))
 
 		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40, UI_BG_COLOR)
-		if player.timer<=TIMER_BLINK_THRESHOLD:
-			if wave_value():
-				self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
-			else:
-				self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
-		else:
-			self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+		self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 
 		yulu = round(player.stats['yulu_bill'],0)
 		if player.coins - yulu <= YULU_BLINK_THRESHOLD and player.yulu==True:
@@ -73,8 +67,4 @@ class UI:
 				self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR_LIGHT)
 		else:
 			self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR)
-
-		if player.started==False:
-			self.show_text(str(LEVELS[int(player.level)-1]['first_message_on_top']), WIDTH//2, 40, UI_BG_COLOR)
-		if player.started:
-		    self.show_text(str(LEVELS[int(player.level)-1]['second_message_on_top']), WIDTH//2, 40, UI_BG_COLOR)
+		self.show_text(str(MESSGAES[int(player.level)-1]), WIDTH//2, 40, UI_BG_COLOR)

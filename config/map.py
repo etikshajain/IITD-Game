@@ -16,7 +16,6 @@ GRASS_ENERGY_RATE=0.01
 FOOD_ENERGY=20
 ENERGY_BLINK_THRESHOLD=20
 YULU_BILL=0.05
-TIMER_BLINK_THRESHOLD=400
 
 STARTING_COINS=500
 COIN_VALUE=50
@@ -44,30 +43,32 @@ UI_BORDER_COLOR = '#111111'
 HIGHLIGHT_COLOR='yellow'
 CHECKPOINT_COLOR='blue'
 
-LEVELS = [    
-    {
-        'id':1,
-        'countdown':3000,
-        'points':200,
-        'start':'hospital',
-        'end':'amul',
-        'story':'story',
-        'task':'task',
-        'first_message_on_top':'Go to the Hospital',
-        'second_message_on_top':'Go to Amul'
-    },
-    {
-        'id':2,
-        'countdown':3000,
-        'points':200,
-        'start':'hostel1',
-        'end':'shop',
-        'story':'story',
-        'task':'task',
-        'first_message_on_top':'Go to Hostel 1',
-        'second_message_on_top':'Go to the Shop'
-    },
-]
+
+TOTAL_TIMER=500
+ENDING_POINT = 'guesthouse'
+CHECKPOINTS = ['hostel1', 'lib', 'cycle_shop', 'guesthouse']
+MESSGAES = ['TASK 1', 'TASK 2', 'TASK 3', 'TASK 4']
+POINTS = [100, 100, 100, 100]
+# LEVELS = [    
+#     {
+#         'points':200,
+#         'start':'hospital',
+#         'end':'amul',
+#         'story':'story',
+#         'task':'task',
+#         'first_message_on_top':'Go to the Hospital',
+#         'second_message_on_top':'Go to Amul'
+#     },
+#     {
+#         'points':200,
+#         'start':'hostel1',
+#         'end':'shop',
+#         'story':'story',
+#         'task':'task',
+#         'first_message_on_top':'Go to Hostel 1',
+#         'second_message_on_top':'Go to the Shop'
+#     },
+# ]
 
 HOSTELS = {
     1:'Jwala',
@@ -106,7 +107,7 @@ WORLD_MAP_1 = [
 ['t',' ',' ','t','t','t','t','t','t','v','t',' ',' ',' ',' ',' ','v','t',' ',' ',' ',' ',' ',' ',' ','t','v','t',' ','H',' ',' ',' ',' ',' ','Cs',' ',' '],
 ['t',' ',' ',' ',' ',' ',' ',' ','t','v','t','B','b',' ',' ',' ','v','h','g',' ','g',' ','R',' ',' ','t','v','t',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
 ['t',' ',' ','G3','g','g',' ',' ','t','v','h','b','b',' ',' ',' ','v','t',' ',' ',' ',' ',' ',' ',' ','h','v','t',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-['t',' ',' ','g','g','g',' ',' ','t','v','p1','t','v','t','t','t','v','t','t','t','t','p2',' ',' ',' ','t','v','t','t','t','v','t','t','t','t','t','v','t'],
+['t',' ',' ','g','g','g',' ',' ','t','v','p','t','v','t','t','t','v','t','t','t','t',' ',' ',' ',' ','t','v','t','t','t','v','t','t','t','t','t','v','t'],
 ['t',' ',' ','g','g','g',' ',' ','t','v','h','D','h','h','h','h','v','h','h','h','h','h','h','h','h','h','v','h','h','h','h','h','h','h','h','h','h','h'],
 ['t',' ',' ','t','v','t','t','t','t','v','t','t','t','t','t','t','v','t','t','t','t','t','t','t','t','t','v','t','t','t','t','t','t','t','v','t','t','t'],
 ['t',' ',' ','t','v','h','h','h','h','v','t',' ',' ',' ',' ','t','v','t',' ',' ',' ',' ',' ',' ',' ','t','v','t',' ',' ',' ','F',' ',' ',' ',' ',' ',' '],

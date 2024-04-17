@@ -1,5 +1,6 @@
 import pygame, sys
 from config.map import *
+from src.helpers import *
 from src.player import Player
 from src.road import Road
 from src.dog import Dog
@@ -30,17 +31,7 @@ class Game:
         self.obstacle_sprites = pygame.sprite.Group()
 
         # player stats
-        self.coins_1=STARTING_COINS
-        self.coins_2=STARTING_COINS
-        self.level_1=1
-        self.level_2=1
-        self.coins=STARTING_COINS
-        self.level=1
-
-        # creating the players
-        self.n = Network()
-        self.player_1 = self.n.getPlayer()
-        self.player_2 = None
+        self.score=0
 
         # sprite setup
         self.create_map()
@@ -49,76 +40,64 @@ class Game:
 
         # game status
         self.playing=False
+        self.player_alive=False
+        self.complete=False
 
         #button
         self.start_button = Button(WIDTH//2, 300, 200, 50, "Start", 'black', self.start_game)
-        self.restart_button = Button(WIDTH//2, 300, 200, 50, "Restart", 'black', self.restart_game)
         self.quit_button = Button(WIDTH//2, 400, 200, 50, "Quit", 'black', self.quit_game)
-        self.next_level_button = Button(WIDTH//2, 300, 300, 50, "Next Level", 'black', self.next_level_game)
-        self.resume_button = Button(WIDTH//2, 500, 200, 50, "Resume", 'black', self.resume_game)
 
         #user interface
+        self.timer=TOTAL_TIMER
         self.ui = UI()
         
     
     def run(self):
         while True:
-            self.player_2 = self.n.send(self.player_1) # send data to server
             for event in pygame.event.get():
-                if self.playing==False:
-                    self.start_button.handle_event(event)
-
-                elif self.player.completed:
-                    self.next_level_button.handle_event(event)
-                    self.quit_button.handle_event(event)
-
-                elif self.player.failed:
-                    self.restart_button.handle_event(event)
-                    self.quit_button.handle_event(event)
-
-                elif self.player.pause:
-                    self.restart_button.handle_event(event)
-                    self.resume_button.handle_event(event)
-                    self.quit_button.handle_event(event)
-
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if self.playing==False:
+                    self.start_button.handle_event(event)
 
-            self.screen.fill('#9be650')
-            if self.playing==False:
-                # start screen
-                self.display_text(f'Welcome to Level:{self.level}')
-                self.start_button.draw()
+                elif self.player.failed:
+                    self.quit_button.handle_event(event)
+            
+            if self.timer>0:
+                self.screen.fill('#9be650')
+                if self.playing==False:
+                    # start screen
+                    self.display_text(f'Welcome to #GAME_NAME')
+                    self.start_button.draw()
 
-            elif self.player.completed:
-                # print("show completed screen")
-                self.display_text(f'Wohooo!! Mission Complete!!')
-                self.next_level_button.draw()
-                self.quit_button.draw()
+                elif self.player.failed:
+                    #print("show failed screen")
+                    self.display_text(f'UhOhhhh!! You Lost!!')
+                    self.quit_button.draw()
+                
+                elif self.player.completed:
+                    self.display_text(f'Amazing!! You completed before time!!!!')
 
-            elif self.player.failed:
-                #print("show failed screen")
-                self.display_text(f'UhOhhhh!! Mission Failed!!')
-                self.restart_button.draw()
-                self.quit_button.draw()
-
-            elif self.player.pause:
-                # print("show pause screen")
-                self.display_text(f'Game Paused')
-                self.restart_button.draw()
-                self.resume_button.draw()
-                self.quit_button.draw()
-
-            elif self.player.playing:
-                # update and draw the game
-                self.visible_sprites.custom_draw(self.player)
-                self.player_sprites.custom_draw(self.player)
-                self.visible_sprites.update()
-                self.ui.display(self.player)
+                if self.playing:
+                    # update and draw the game
+                    self.timer-=1
+                    self.visible_sprites.custom_draw(self.player)
+                    self.player_sprites.custom_draw(self.player)
+                    self.visible_sprites.update()
+                    self.ui.display(self.player, self.timer)
+            
+            else:
+                self.complete=True
+                if self.player.failed==False and self.playing:
+                    self.player_alive=True
+                    print("move to battle area")
+                
 
             pygame.display.update()
             self.clock.tick(FPS)
+
+            
     
 
     def create_map(self):
@@ -182,12 +161,9 @@ class Game:
                 if col == 'c':
                     Road((x,y),[self.visible_sprites],True)
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
-                if col == 'p1':
+                if col == 'p':
                     print(x,y)
-                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
-                if col == 'p2':
-                    print(x,y)
-                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
+                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites)
     
     def place_random_dogs(self):
         # possible dog positions
@@ -210,41 +186,11 @@ class Game:
     
     def start_game(self):
         self.playing=True
-        self.player.playing=True
-    
-    def restart_game(self):
-        self.coins=STARTING_COINS
-        self.level=1
-        self.playing=False
-        # sprite setup
-        self.visible_sprites = YSortCameraGroup()
-        self.player_sprites = YSortCameraGroup()
-        self.obstacle_sprites = pygame.sprite.Group()
-        self.create_map()
-        self.place_random_dogs()
-        self.place_random_coins()
         
     
     def quit_game(self):
         pygame.quit()
         sys.exit()
-    
-    def next_level_game(self):
-        self.level+=1
-        self.coins=self.player.coins
-        self.playing=False
-        # sprite setup
-        self.visible_sprites = YSortCameraGroup()
-        self.player_sprites = YSortCameraGroup()
-        self.obstacle_sprites = pygame.sprite.Group()
-        self.create_map()
-        self.place_random_dogs()
-        self.place_random_coins()
-        return
-    
-    def resume_game(self):
-        self.player.playing=True
-        self.player.pause=False
 
         
 class YSortCameraGroup(pygame.sprite.Group):
