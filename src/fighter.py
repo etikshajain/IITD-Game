@@ -12,7 +12,7 @@ class Fighter():
     self.action = 0 #0:idle #1:walk #2:run #3:attack1 #4: attack2 #5: attack3 #6:defense #7:jump #8:hit #9:death
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
-    self.rect = pygame.Rect((x, y, 80, 270))
+    self.rect = pygame.Rect((x, y, 80, 240))
     self.vel_y = 0
     self.running = False
     self.jump = False
@@ -20,6 +20,9 @@ class Fighter():
     self.attacked_opo = False
     self.attack_type = 0
     self.attack_cooldown = 0
+    self.blocking= False
+    self.block_cooldown = 0
+    self.attack_blocked = False
     self.hit = False
     self.health = 100
     self.alive = True
@@ -30,30 +33,32 @@ class Fighter():
     self.running = False
     self.attack_type = 0
     
-    #get keypresses
     key = pygame.key.get_pressed()
 
     #can only perform other actions if not currently attacking
     if self.attacking == False and self.alive == True and round_over == False:
-      if key[pygame.K_a]:
+      if key[pygame.K_LEFT]:
         dx = -SPEED
         self.running = True
-      if key[pygame.K_d]:
+      if key[pygame.K_RIGHT]:
         dx = SPEED
         self.running = True
       #jump
-      if key[pygame.K_w] and self.jump == False:
+      if key[pygame.K_UP] and self.jump == False:
         self.vel_y = -JUMP_Y
         self.jump = True
       #attack
-      if key[pygame.K_r] or key[pygame.K_t]:
+      if key[pygame.K_z] or key[pygame.K_c]:
         self.attack(target)
-        #determine which attack type was used
-        if key[pygame.K_r]:
+        #determine attack type
+        if key[pygame.K_c]:
           self.attack_type = 1
-        if key[pygame.K_t]:
+        if key[pygame.K_z]:
           self.attack_type = 2
-
+      #block
+      if key[pygame.K_x]: 
+        self.block(target)
+    
     #apply gravity
     self.vel_y += GRAVITY
     dy += self.vel_y
@@ -63,10 +68,10 @@ class Fighter():
       dx = -self.rect.left
     if self.rect.right + dx > screen_width:
       dx = screen_width - self.rect.right
-    if self.rect.bottom + dy > screen_height - 110:
+    if self.rect.bottom + dy > screen_height - 50:
       self.vel_y = 0
       self.jump = False
-      dy = screen_height - 110 - self.rect.bottom
+      dy = screen_height - 50 - self.rect.bottom
 
     #ensure players face each other
     if target is not None:
@@ -78,15 +83,17 @@ class Fighter():
     #attack cooldown
     if self.attack_cooldown > 0:
       self.attack_cooldown -= 1
+    #block cooldown
+    if self.block_cooldown >0:
+      self.block_cooldown-=1
 
     #update player position
     self.rect.x += dx
     self.rect.y += dy
 
 
-  #handle animation updates
   def update(self):
-    #check what action the player is performing
+    #determine action the player is performing
     if self.health <= 0:
       self.health = 0
       self.alive = False
@@ -98,6 +105,8 @@ class Fighter():
         self.update_action(3) #attack1
       elif self.attack_type == 2:
         self.update_action(4) #attack2
+    elif self.blocking == True: #block
+      self.update_action(6)
     elif self.jump == True:
       self.update_action(7) #jump
     elif self.running == True:
@@ -121,13 +130,16 @@ class Fighter():
         if self.action == 3 or self.action == 4:
           self.attacking = False
           self.attack_cooldown = ATTACK_COOLDOWN
+        #check if the player blocked the move
+        if self.action == 6:
+          self.blocking= False
+          self.block_cooldown= BLOCK_COOLDOWN
         #check if damage was taken
         if self.action == 8:
           self.hit = False
           #if the player was in the middle of an attack, then the attack is stopped
           self.attacking = False
           self.attack_cooldown = ATTACK_COOLDOWN
-
 
   def attack(self, target):
     if self.attack_cooldown == 0:
@@ -136,9 +148,16 @@ class Fighter():
       attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
       if attacking_rect.colliderect(target.rect):
         # print(self.pid, "hit sent")
-        pygame.draw.rect(surface,(0,255,0),attacking_rect)
-        self.attacked_opo = True
+        # pygame.draw.rect(surface,(0,255,0),attacking_rect)
+        if target.blocking == True:
+          self.attack_blocked = True
+        else:
+          self.attacked_opo = True
 
+  def block(self,target):
+      if self.block_cooldown == 0:
+        self.blocking= True
+  
   def update_action(self, new_action):
     if new_action != self.action:
       self.action = new_action
@@ -150,4 +169,4 @@ class Fighter():
       return
     img = pygame.transform.flip(image, self.flip, False)
     surface.blit(img, (self.rect.x - (self.offset[0] * self.image_scale), self.rect.y - (self.offset[1] * self.image_scale)))
-    pygame.draw.rect(surface,(255,0,0),self.rect)
+    # pygame.draw.rect(surface,(255,0,0),self.rect)

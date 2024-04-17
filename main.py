@@ -23,6 +23,8 @@ pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1, 0.0, 5000)
 sword_attack = pygame.mixer.Sound(SWORD_ATTACK_AUDIO)
 sword_attack.set_volume(0.8)
+sword_clash = pygame.mixer.Sound(SWORD_CLASH_AUDIO)
+sword_clash.set_volume(0.8)
 
 bg_image = pygame.image.load(VSMODE_BACKGROUND).convert_alpha()
 count_font = pygame.font.Font(COUNTDOWN_FONT, 80)
@@ -74,6 +76,13 @@ while run:
   draw_bg()
 
   fighter_2 = n.send(fighter_1) # send data to server
+  
+  #check for blocked_attack
+  if fighter_2 is not None:
+    if fighter_1.attack_blocked == True or fighter_2.attack_blocked == True:
+      sword_clash.play()
+      fighter_1.attack_blocked = False
+      fighter_2.attack_blocked = False
 
   #show health stats
   if fighter_1.pid == 1:
