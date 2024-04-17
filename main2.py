@@ -30,9 +30,6 @@ class Game:
         self.player_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
-        # player stats
-        self.score=0
-
         # sprite setup
         self.create_map()
         self.place_random_dogs()
@@ -90,6 +87,8 @@ class Game:
             else:
                 self.complete=True
                 if self.player.failed==False and self.playing:
+                    # final score of the player
+                    self.player.score = self.player.coins + self.player.energy*10
                     self.player_alive=True
                     print("move to battle area")
                 

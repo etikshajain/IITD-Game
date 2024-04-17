@@ -43,6 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = SPEED
         self.yulu_speed = YULU_SPEED
         self.grass_speed = GRASS_SPEED
+        self.score=0
 
         # level stats
         self.level = 1
