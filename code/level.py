@@ -118,19 +118,7 @@ class Level:
 
     def place_random_coins(self):
         return
-    
-    # def input(self):
-    #     keys = pygame.key.get_pressed()
 
-    #     # start game
-    #     if keys[pygame.K_RSHIFT]:
-    #         if self.playing==False:
-    #             self.playing=True
-    #             self.player.playing=True
-    #     if keys[pygame.K_LSHIFT]:
-    #         if self.player.pause==True:
-    #             self.player.pause=False
-    #             self.player.playing=True
 
     def display_text(self, text):
         text_surf = pygame.font.Font(UI_FONT,30).render(str((text)),False,'black')

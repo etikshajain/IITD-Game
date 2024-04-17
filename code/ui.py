@@ -1,5 +1,6 @@
 import pygame
 from settings import * 
+from helpers import *
 
 class UI:
 	def __init__(self):
@@ -28,11 +29,11 @@ class UI:
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,energy_bar_rect,3)
 		
 
-	def show_text(self,exp,x,y):
+	def show_text(self,exp,x,y, ui_bg):
 		text_surf = self.font.render(str((exp)),False,TEXT_COLOR)
 		text_rect = text_surf.get_rect(bottomright = (x,y))
 
-		pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
+		pygame.draw.rect(self.display_surface,ui_bg,text_rect.inflate(20,20))
 		self.display_surface.blit(text_surf,text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 	
@@ -45,13 +46,35 @@ class UI:
 		self.display_surface.blit(text_surf,text_rect)
 
 	def display(self,player):
-		self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
-		self.show_coins(str(player.coins))
+		if player.energy<=ENERGY_BLINK_THRESHOLD:
+			if wave_value()>0:
+				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
+			else:
+				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR_LIGHT)
+		else:
+			self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
 
-		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40)
-		self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90)
-		self.show_text('Yulu Bill:'+str(player.stats['yulu_bill']), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20)
+		self.show_coins(str(round(player.coins,0)))
+
+		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40, UI_BG_COLOR)
+		if player.timer<=TIMER_BLINK_THRESHOLD:
+			if wave_value():
+				self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+			else:
+				self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
+		else:
+			self.show_text('Timer: '+str(player.timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+
+		yulu = round(player.stats['yulu_bill'],0)
+		if player.coins - yulu <= YULU_BLINK_THRESHOLD and player.yulu==True:
+			if wave_value()>0:
+				self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR)
+			else:
+				self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR_LIGHT)
+		else:
+			self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR)
+
 		if player.started==False:
-			self.show_text(str(LEVELS[int(player.level)-1]['first_message_on_top']), WIDTH//2, 40)
+			self.show_text(str(LEVELS[int(player.level)-1]['first_message_on_top']), WIDTH//2, 40, UI_BG_COLOR)
 		if player.started:
-		    self.show_text(str(LEVELS[int(player.level)-1]['second_message_on_top']), WIDTH//2, 40)
+		    self.show_text(str(LEVELS[int(player.level)-1]['second_message_on_top']), WIDTH//2, 40, UI_BG_COLOR)

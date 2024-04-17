@@ -274,7 +274,6 @@ class Player(pygame.sprite.Sprite):
                 d2 = max(sprite.rect.width,sprite.rect.height)
                 d3 = (((x1-x2)**2)+((y1-y2)**2))**0.5
                 if d3<=(d1+d2)//2 + 20:
-                # if abs(self.rect.centerx-sprite.rect.centerx)<=150 and abs(self.rect.centery-sprite.rect.centery)<=150:
                     if self.yulu==False:
                         sprite_ = sprite
                     else:
