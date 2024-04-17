@@ -50,40 +50,6 @@ class Game:
 
         #user interface
         self.ui = UI()
-
-    
-    def run(self):
-        # self.input()
-        if self.playing==False:
-            # start screen
-            self.display_text(f'Welcome to Level:{self.level}')
-            self.start_button.draw()
-
-        elif self.player.completed:
-            # print("show completed screen")
-            self.display_text(f'Wohooo!! Mission Complete!!')
-            self.next_level_button.draw()
-            self.quit_button.draw()
-
-        elif self.player.failed:
-            #print("show failed screen")
-            self.display_text(f'UhOhhhh!! Mission Failed!!')
-            self.restart_button.draw()
-            self.quit_button.draw()
-
-        elif self.player.pause:
-            # print("show pause screen")
-            self.display_text(f'Game Paused')
-            self.restart_button.draw()
-            self.resume_button.draw()
-            self.quit_button.draw()
-
-        elif self.player.playing:
-            # update and draw the game
-            self.visible_sprites.custom_draw(self.player)
-            self.player_sprites.custom_draw(self.player)
-            self.visible_sprites.update()
-            self.ui.display(self.player)
         
     
     def run(self):
