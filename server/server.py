@@ -1,14 +1,16 @@
+import os
+import sys
 import socket
 from _thread import *
-from fighter import Fighter
 import pickle
-import pygame
-import sys
-from config.server import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.fighter import Fighter
+from config.server import * # server params
 
 ip = IP_ADDR
 port = PORT
-print(server)
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
@@ -19,16 +21,6 @@ except socket.error as e:
 s.listen(2)
 print("Waiting for a connection, Server Started")
 
-
-pygame.init()
-
-#create game window
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 600
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-#define fighter variables
 WARRIOR_SIZE = 128
 WARRIOR_SCALE = 4
 WARRIOR_OFFSET = [72, 56]
