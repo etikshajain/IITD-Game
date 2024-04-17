@@ -1,0 +1,3 @@
+IP_ADDR = "127.0.0.1" #localhost
+PORT = 8080
+BUFFER_SIZE = 2048

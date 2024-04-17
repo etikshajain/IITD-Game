@@ -4,14 +4,15 @@ from fighter import Fighter
 import pickle
 import pygame
 import sys
+from config.server import *
 
-server = "127.0.0.1"
-port = 8080
+ip = IP_ADDR
+port = PORT
 print(server)
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
-    s.bind((server, port))
+    s.bind((ip, port))
 except socket.error as e:
     str(e)
 
@@ -37,11 +38,6 @@ WIZARD_SCALE = 4
 WIZARD_OFFSET = [72, 56]
 WIZARD_DATA = [WIZARD_SIZE, WIZARD_SCALE, WIZARD_OFFSET]
 
-# sword_fx = pygame.mixer.Sound("assets/audio/sword.wav")
-# sword_fx.set_volume(0.5)
-# magic_fx = pygame.mixer.Sound("assets/audio/magic.wav")
-# magic_fx.set_volume(0.75)
-
 WARRIOR_ANIMATION_STEPS = [5, 9, 8, 4, 5, 4, 2, 7, 2, 6]
 WIZARD_ANIMATION_STEPS = [6, 9, 8, 4, 5, 4, 2, 9, 3, 6]
 
@@ -55,7 +51,7 @@ def threaded_client(conn, player):
     reply = ""
     while True:
         try:
-            data = pickle.loads(conn.recv(2048))
+            data = pickle.loads(conn.recv(BUFFER_SIZE))
             players[player] = data
 
             if not data:
