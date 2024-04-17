@@ -1,4 +1,5 @@
 import pygame
+from config.fighter import *
 
 class Fighter():
   def __init__(self, pid, x, y, flip, data, animation_list):
@@ -7,7 +8,7 @@ class Fighter():
     self.image_scale = data[1]
     self.offset = data[2]
     self.flip = flip
-    self.animation_list = animation_list # self.load_images(sprite_sheet, animation_steps)
+    self.animation_list = animation_list
     self.action = 0 #0:idle #1:walk #2:run #3:attack1 #4: attack2 #5: attack3 #6:defense #7:jump #8:hit #9:death
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
@@ -24,13 +25,11 @@ class Fighter():
     self.alive = True
 
   def move(self, screen_width, screen_height, surface, target, round_over):
-    SPEED = 10
-    GRAVITY = 2
     dx = 0
     dy = 0
     self.running = False
     self.attack_type = 0
-
+    
     #get keypresses
     key = pygame.key.get_pressed()
 
@@ -44,7 +43,7 @@ class Fighter():
         self.running = True
       #jump
       if key[pygame.K_w] and self.jump == False:
-        self.vel_y = -30
+        self.vel_y = -JUMP_Y
         self.jump = True
       #attack
       if key[pygame.K_r] or key[pygame.K_t]:
@@ -76,7 +75,7 @@ class Fighter():
       else:
         self.flip = True
 
-    #apply attack cooldown
+    #attack cooldown
     if self.attack_cooldown > 0:
       self.attack_cooldown -= 1
 
@@ -106,7 +105,7 @@ class Fighter():
     else:
       self.update_action(0) #idle
 
-    animation_cooldown = 50
+    animation_cooldown = ANIMATION_COOLDOWN
     #check if enough time has passed since the last update
     if pygame.time.get_ticks() - self.update_time > animation_cooldown:
       self.frame_index += 1
@@ -121,13 +120,13 @@ class Fighter():
         #check if an attack was executed
         if self.action == 3 or self.action == 4:
           self.attacking = False
-          self.attack_cooldown = 20
+          self.attack_cooldown = ATTACK_COOLDOWN
         #check if damage was taken
         if self.action == 8:
           self.hit = False
           #if the player was in the middle of an attack, then the attack is stopped
           self.attacking = False
-          self.attack_cooldown = 20
+          self.attack_cooldown = ATTACK_COOLDOWN
 
 
   def attack(self, target):
@@ -136,7 +135,7 @@ class Fighter():
       self.attacking = True
       attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
       if attacking_rect.colliderect(target.rect):
-        print(self.pid, "hit sent")
+        # print(self.pid, "hit sent")
         self.attacked_opo = True
 
 
