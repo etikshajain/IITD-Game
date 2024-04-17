@@ -12,7 +12,7 @@ class Fighter():
     self.action = 0 #0:idle #1:walk #2:run #3:attack1 #4: attack2 #5: attack3 #6:defense #7:jump #8:hit #9:death
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
-    self.rect = pygame.Rect((x, y, 80, 180))
+    self.rect = pygame.Rect((x, y, 80, 270))
     self.vel_y = 0
     self.running = False
     self.jump = False
@@ -136,8 +136,8 @@ class Fighter():
       attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
       if attacking_rect.colliderect(target.rect):
         # print(self.pid, "hit sent")
+        pygame.draw.rect(surface,(0,255,0),attacking_rect)
         self.attacked_opo = True
-
 
   def update_action(self, new_action):
     if new_action != self.action:
@@ -150,3 +150,4 @@ class Fighter():
       return
     img = pygame.transform.flip(image, self.flip, False)
     surface.blit(img, (self.rect.x - (self.offset[0] * self.image_scale), self.rect.y - (self.offset[1] * self.image_scale)))
+    pygame.draw.rect(surface,(255,0,0),self.rect)
