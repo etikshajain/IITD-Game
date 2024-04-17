@@ -6,6 +6,7 @@ import pickle
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.fighter import Fighter
+from src.player import Player
 from config.main import SAMURAI1_ANIMATION_LIST,SAMURAI2_ANIMATION_LIST
 from config.main import SAMURAI1_DATA,SAMURAI2_DATA
 from config.main import SCREEN_HEIGHT,SCREEN_WIDTH,CHARACTER_X_OFFSET,CHARACTER_Y_OFFSET

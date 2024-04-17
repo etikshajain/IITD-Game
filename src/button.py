@@ -1,5 +1,5 @@
 import pygame 
-from settings import *
+from config.map import *
 
 class Button:
     def __init__(self, x, y, width, height, text, color, action):

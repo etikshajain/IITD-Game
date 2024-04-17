@@ -1,6 +1,6 @@
 import pygame 
-from settings import *
-from helpers import import_folder, wave_value
+from config.map import *
+from src.helpers import import_folder, wave_value
 
 class Building(pygame.sprite.Sprite):
     def __init__(self,pos,groups, name, graphic):

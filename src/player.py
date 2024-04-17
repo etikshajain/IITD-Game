@@ -1,12 +1,12 @@
 import pygame 
-from settings import *
-from helpers import import_folder, wave_value
+from config.map import *
+from src.helpers import import_folder, wave_value
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites, coins, level):
         super().__init__(groups)
         self.name = 'player'
-        self.image = pygame.image.load('../assets/map_mode/player/player_40.jpg').convert_alpha()
+        self.image = pygame.image.load('./assets/map_mode/player/player_40.jpg').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.display_surface = pygame.display.get_surface()
         self.half_width = self.display_surface.get_size()[0] // 2
@@ -63,7 +63,7 @@ class Player(pygame.sprite.Sprite):
         self.completed=False
     
     def import_player_assets(self):
-        character_path = '../assets/map_mode/player/'
+        character_path = './assets/map_mode/player/'
         self.animations = {'up': [],'down': [],'left': [],'right': [],
 			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
 			'right_yulu':[],'left_yulu':[],'up_yulu':[],'down_yulu':[]}

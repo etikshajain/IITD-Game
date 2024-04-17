@@ -1,5 +1,5 @@
 import pygame 
-from settings import *
+from config.map import *
 
 class Landmark(pygame.sprite.Sprite):
 	def __init__(self,pos,groups, text):

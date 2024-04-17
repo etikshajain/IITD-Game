@@ -1,15 +1,15 @@
 import pygame, sys
-from settings import *
-from player import Player
-from road import Road
-from dog import Dog
-from coin import Coin
-from landmark import Landmark
-from building import Building
-from ui import UI
-from button import Button
+from config.map import *
+from src.player import Player
+from src.road import Road
+from src.dog import Dog
+from src.coin import Coin
+from src.landmark import Landmark
+from src.building import Building
+from src.ui import UI
+from src.button import Button
 import sys
-from debug import debug
+from src.debug import debug
 from server.network import Network
 
 class Game:
@@ -30,8 +30,17 @@ class Game:
         self.obstacle_sprites = pygame.sprite.Group()
 
         # player stats
+        self.coins_1=STARTING_COINS
+        self.coins_2=STARTING_COINS
+        self.level_1=1
+        self.level_2=1
         self.coins=STARTING_COINS
         self.level=1
+
+        # creating the players
+        self.n = Network()
+        self.player_1 = self.n.getPlayer()
+        self.player_2 = None
 
         # sprite setup
         self.create_map()
@@ -54,8 +63,7 @@ class Game:
     
     def run(self):
         while True:
-            n = Network()
-            player_1 = n.getPlayer()
+            self.player_2 = self.n.send(self.player_1) # send data to server
             for event in pygame.event.get():
                 if self.playing==False:
                     self.start_button.handle_event(event)
@@ -125,56 +133,60 @@ class Game:
                 if col == 'v':
                     Road((x,y),[self.visible_sprites],True)
                 if col[0] == 'G':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hostel'+str(col[1:]), '../assets/map_mode/hostel/hostell_192.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hostel'+str(col[1:]), './assets/map_mode/hostel/hostell_192.jpg')
                 if col == 'Y':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'yulu_stand', '../assets/map_mode/buildings/yulu_64.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'yulu_stand', './assets/map_mode/buildings/yulu_64.jpg')
                 if col == 't':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tree', '../assets/map_mode/tree/tree_50.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tree', './assets/map_mode/tree/tree_50.jpg')
                 if col == 'T':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tennis', '../assets/map_mode/grounds/tennis.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'tennis', './assets/map_mode/grounds/tennis.jpg')
                 if col == 'B':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bank', '../assets/map_mode/buildings/bank_128.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bank', './assets/map_mode/buildings/bank_128.jpg')
                 if col == 'R':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'rajdhani', '../assets/map_mode/buildings/rajdhani.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'rajdhani', './assets/map_mode/buildings/rajdhani.jpg')
                 if col == 'C':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'cycle_shop', '../assets/map_mode/buildings/cycle.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'cycle_shop', './assets/map_mode/buildings/cycle.jpg')
                 if col == 'S':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'sac', '../assets/map_mode/buildings/sac.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'sac', './assets/map_mode/buildings/sac.jpg')
                 if col == 'H':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hospital', '../assets/map_mode/buildings/hospi.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'hospital', './assets/map_mode/buildings/hospi.jpg')
                 if col == 'F':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'football', '../assets/map_mode/grounds/football.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'football', './assets/map_mode/grounds/football.jpg')
                 if col == 'Bb':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'basketball', '../assets/map_mode/grounds/bb.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'basketball', './assets/map_mode/grounds/bb.jpg')
                 if col == 'Rr':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'racing', '../assets/map_mode/grounds/racing.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'racing', './assets/map_mode/grounds/racing.jpg')
                 if col == 'A':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'amul', '../assets/map_mode/buildings/amul.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'amul', './assets/map_mode/buildings/amul.jpg')
                 if col == 'Cs':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bharti', '../assets/map_mode/buildings/bharti.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'bharti', './assets/map_mode/buildings/bharti.jpg')
                 if col == 'M':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'main_building', '../assets/map_mode/buildings/main.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'main_building', './assets/map_mode/buildings/main.jpg')
                 if col == 'Lh':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lhc', '../assets/map_mode/buildings/lhc.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lhc', './assets/map_mode/buildings/lhc.jpg')
                 if col == 'Q':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'red_square', '../assets/map_mode/buildings/parkk.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'red_square', './assets/map_mode/buildings/parkk.jpg')
                 if col == 'P':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'biotech', '../assets/map_mode/buildings/park.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'biotech', './assets/map_mode/buildings/park.jpg')
                 if col == 'L':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lib', '../assets/map_mode/buildings/lib.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'lib', './assets/map_mode/buildings/lib.jpg')
                 if col == 'E':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'exhall', '../assets/map_mode/buildings/exhall.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'exhall', './assets/map_mode/buildings/exhall.jpg')
                 if col == 'I':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'shop', '../assets/map_mode/buildings/shop.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'shop', './assets/map_mode/buildings/shop.jpg')
                 if col == 'X':
-                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'guesthouse', '../assets/map_mode/buildings/guesthouse.jpg')
+                    Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'guesthouse', './assets/map_mode/buildings/guesthouse.jpg')
                 if col == 'D':
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'c':
                     Road((x,y),[self.visible_sprites],True)
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
-                if col == 'p':
+                if col == 'p1':
+                    print(x,y)
+                    self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
+                if col == 'p2':
+                    print(x,y)
                     self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites, self.coins, self.level)
     
     def place_random_dogs(self):
@@ -242,6 +254,25 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
+    
+    def animate(self):
+        animation = self.animations[self.status]
+
+        # loop over the frame index 
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(animation):
+            self.frame_index = 0
+
+        # set the image
+        self.image = animation[int(self.frame_index)]
+        self.rect = self.image.get_rect(center = self.rect.center)
+
+        # flicker on dog hit
+        if self.hurting:
+            alpha = wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
 
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - self.half_width

@@ -1,6 +1,6 @@
 import pygame
-from settings import * 
-from helpers import *
+from config.map import * 
+from src.helpers import *
 
 class UI:
 	def __init__(self):
