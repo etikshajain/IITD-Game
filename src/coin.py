@@ -1,6 +1,5 @@
 import pygame 
 from config.map import *
-from src.helpers import import_folder, wave_value
 
 class Coin(pygame.sprite.Sprite):
     def __init__(self,pos,groups):

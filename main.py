@@ -78,10 +78,7 @@ class Game:
                     self.quit_button.draw()
                 
                 elif self.player.completed==True:
-                    return self.player.coins
-                    self.timer-=1
-                    # self.display_text(f'Amazing!! You completed before time!!!!',200)
-                    self.ui.display_time(self.timer)
+                    return self.player.score
 
                 elif self.playing:
                     # update and draw the game
@@ -96,7 +93,7 @@ class Game:
                 self.complete=True
                 if self.player.failed==False:
                     self.player_alive=True
-                    return self.player.coins
+                    return self.player.score
                 
 
             pygame.display.update()
@@ -161,7 +158,6 @@ class Game:
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'c':
-                    Road((x,y),[self.visible_sprites],True)
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':
                     print(x,y)
@@ -202,25 +198,6 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-    
-    def animate(self):
-        animation = self.animations[self.status]
-
-        # loop over the frame index 
-        self.frame_index += self.animation_speed
-        if self.frame_index >= len(animation):
-            self.frame_index = 0
-
-        # set the image
-        self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center = self.rect.center)
-
-        # flicker on dog hit
-        if self.hurting:
-            alpha = wave_value()
-            self.image.set_alpha(alpha)
-        else:
-            self.image.set_alpha(255)
 
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - self.half_width

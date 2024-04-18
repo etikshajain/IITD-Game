@@ -10,3 +10,13 @@ COP290 Sem-ll 2024 A2 ST2 - Game Dev
 ```
 ./scripts/run_server.sh wifi
 ```
+
+# Joining the game
+- On localhost
+```
+./scripts/run_game.sh
+```
+- On the wifi network
+```
+./scripts/run_game.sh wifi
+```

@@ -1,6 +1,6 @@
 import pygame 
 from config.map import *
-from src.helpers import import_folder, wave_value
+from src.helpers import wave_value
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites):
