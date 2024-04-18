@@ -166,9 +166,12 @@ class Game:
                     Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'shop', './assets/map_mode/buildings/shop.jpg')
                 if col == 'X':
                     Building((x,y),[self.visible_sprites,self.obstacle_sprites], 'guesthouse', './assets/map_mode/buildings/guesthouse.jpg')
-                if col == 'D':
+                if col == 'Dh':
                     Road((x,y),[self.visible_sprites],False)
-                    Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
+                    Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites, 'horizontal')
+                if col == 'Dv':
+                    Road((x,y),[self.visible_sprites],True)
+                    Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites, 'vertical')
                 if col == 'c':
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':

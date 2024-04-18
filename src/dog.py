@@ -2,7 +2,7 @@ import pygame
 from config.map import *
 
 class Dog(pygame.sprite.Sprite):
-    def __init__(self,pos,groups, visible_sprites):
+    def __init__(self,pos,groups, visible_sprites, mode):
         super().__init__(groups)
         self.name = 'dog'
         self.image = pygame.image.load('./assets/map_mode/dog/dog.jpg').convert_alpha()
@@ -16,7 +16,10 @@ class Dog(pygame.sprite.Sprite):
 
         #movement 
         self.direction = pygame.math.Vector2()
-        self.direction.x=1
+        if mode=='horizontal':
+            self.direction.x=1
+        else:
+            self.direction.y=1
 
         # stats
         self.speed = DOG_SPEED
