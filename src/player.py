@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
         self.dog_hit = pygame.mixer.Sound(DOG_HIT_AUDIO)
         self.dog_hit.set_volume(0.8)
         self.yulu_sit = pygame.mixer.Sound(YULU_SIT_AUDIO)
-        self.yulu_sit.set_volume(0.8)
+        self.yulu_sit.set_volume(1.0)
         self.eat = pygame.mixer.Sound(EAT_AUDIO)
         self.eat.set_volume(0.8)
         self.task_done = pygame.mixer.Sound(TASK_DONE_AUDIO)
@@ -273,17 +273,17 @@ class Player(pygame.sprite.Sprite):
                     c+=1
             # check dog hit
             if sprite.name=='dog' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
+                self.dog_hit.play()
                 self.energy = max(0,self.energy-DOG_BITE_ENERGY)
                 self.dog_attack_time = pygame.time.get_ticks()
                 self.hurting=True
-                self.dog_hit.play()
             
             # check coin hit
             if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
+                self.coin_pick.play()
                 self.coins+=COIN_VALUE
                 self.visible_sprites.remove(sprite)
                 self.player_sprites.remove(sprite)
-                self.coin_pick.play()
 
 
         if c==0:

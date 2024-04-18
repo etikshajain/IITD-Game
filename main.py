@@ -54,13 +54,13 @@ class Game:
         
     
     def run(self):
-        # pygame.mixer.music.load(MAPMODE_BACKGROUND_AUDIO)
-        # pygame.mixer.music.set_volume(0.5)
-        # pygame.mixer.music.play(-1, 0.0, 5000)
+        pygame.mixer.music.load(MAPMODE_BACKGROUND_AUDIO)
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play(-1, 0.0, 5000)
         grass = pygame.mixer.Sound(GRASS_AUDIO)
         grass.set_volume(0.6)
         yulu_ride = pygame.mixer.Sound(YULU_RIDE_AUDIO)
-        yulu_ride.set_volume(0.8)
+        yulu_ride.set_volume(2.0)
 
         
         while True:
@@ -98,8 +98,8 @@ class Game:
                     self.visible_sprites.update()
                     if self.player.yulu:
                         yulu_ride.play()
-                    elif self.player.grass:
-                        grass.play()
+                    # elif self.player.grass:
+                    #     grass.play()
             
             else:
                 self.complete=True
