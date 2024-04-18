@@ -1,26 +1,18 @@
-import pygame, sys
-from config.map import *
-from src.helpers import *
-from src.player import Player
-from src.road import Road
-from src.dog import Dog
-from src.coin import Coin
-from src.landmark import Landmark
-from src.building import Building
-from src.ui import UI
-from src.button import Button
-import sys
-from src.debug import debug
+import pygame
+from pygame import mixer
 from server.network import Network
+from main2 import Game
+from config.main import *
+from config.fighter import SWORD_DAMAGE
 
-class Game:
-    def __init__(self):
-          
-        # general setup
-        pygame.init()
-        self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
-        pygame.display.set_caption('IIT Delhi')
-        self.clock = pygame.time.Clock()
+mixer.init()
+pygame.init()
+
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Brawler")
+
+clock = pygame.time.Clock()
 
         # get the display surface 
         self.display_surface = pygame.display.get_surface()
