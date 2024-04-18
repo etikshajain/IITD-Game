@@ -16,6 +16,7 @@ class Fighter():
     self.vel_y = 0
     self.running = False
     self.jump = False
+    self.sword_power = 0
     self.attacking = False
     self.attacked_opo = False
     self.attack_type = 0
@@ -24,7 +25,7 @@ class Fighter():
     self.block_cooldown = 0
     self.attack_blocked = False
     self.hit = False
-    self.health = 100
+    self.health = 100.0
     self.alive = True
 
   def move(self, screen_width, screen_height, surface, target, round_over):
