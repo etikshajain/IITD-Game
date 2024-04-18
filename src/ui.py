@@ -38,10 +38,8 @@ class UI:
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 	
 
-	def show_coins(self,coins):
-		text_surf = self.font.render(str(f'Coins:{coins}'),False,'black')
-		x = 10
-		y = 40
+	def show_coins(self,txt,x,y):
+		text_surf = self.font.render(txt,False,'black')
 		text_rect = text_surf.get_rect(topleft = (x,y))
 		self.display_surface.blit(text_surf,text_rect)
 
@@ -62,7 +60,8 @@ class UI:
 		else:
 			self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 
-		self.show_coins(str(round(player.coins,0)))
+		self.show_coins(str('Coins:'+str(round(player.coins,0))),10,40)
+		self.show_coins(str('Score:'+str(round(player.score,0))),10,80)
 
 		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40, UI_BG_COLOR)
 

@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = SPEED
         self.yulu_speed = YULU_SPEED
         self.grass_speed = GRASS_SPEED
-        self.score=0
+        self.score=self.energy*10+self.coins
 
         # level stats
         self.level = 1
@@ -292,6 +292,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.check_game_status()
         if self.failed==False and self.completed==False:
+            # update the score of the player
+            self.score=self.energy*10+self.coins
             self.check_proximity()
             self.input()
             self.cooldowns()
