@@ -36,8 +36,6 @@ class Game:
 
         # sprite setup
         self.create_map()
-        self.place_random_dogs()
-        self.place_random_coins()
 
         # game status
         self.playing=False
@@ -78,7 +76,7 @@ class Game:
                 self.screen.fill('#9be650')
                 if self.playing==False:
                     # start screen
-                    self.display_text(f'Welcome to #GAME_NAME',200)
+                    self.display_text(f'Welcome to IITD Poltu!!',200)
                     self.start_button.draw()
 
                 elif self.player.failed:
@@ -86,11 +84,11 @@ class Game:
                     self.quit_button.draw()
                 
                 elif self.player.completed==True:
-                    return self.player.score
+                    return self.player.score + self.timer
 
                 elif self.playing:
                     # update and draw the game
-                    self.timer-=1
+                    self.timer-=0.01
                     self.visible_sprites.custom_draw(self.player)
                     self.player_sprites.custom_draw(self.player)
                     self.ui.display(self.player)
@@ -177,16 +175,6 @@ class Game:
                 if col == 'p':
                     print(x,y)
                     self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites)
-    
-    def place_random_dogs(self):
-        # possible dog positions
-        dog_count=5
-        vertical_road_positions =[]
-        horizontal_road_positions =[]
-        return
-
-    def place_random_coins(self):
-        return
 
 
     def display_text(self, text, ycoord):
@@ -241,8 +229,8 @@ if __name__ == '__main__':
         if fighter_2 is not None:
             break
         else:
-            game.display_text(f'Amazing!! You completed before time!!',200)
-            game.display_text(f'but your partner is slow :)',300)
+            game.display_text(f'Amazing!! You completed Early!!',200)
+            game.display_text(f'but your partner started late :)',300)
             game.display_text(f'waiting for him/her to finish the round 1',400)
             pygame.display.update()
             game.clock.tick(FPS)

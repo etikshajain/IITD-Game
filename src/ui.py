@@ -79,8 +79,8 @@ class UI:
 	def display_time(self, timer):
 		if timer<=TIMER_BLINK_THRESHOLD:
 			if wave_value()>0:
-				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+				self.show_text('Timer: '+str(round(timer,0)), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 			else:
-				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
+				self.show_text('Timer: '+str(round(timer,0)), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
 		else:
-			self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+			self.show_text('Timer: '+str(round(timer,0)), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
