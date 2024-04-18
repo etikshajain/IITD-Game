@@ -159,7 +159,7 @@ class Game:
                     Road((x,y),[self.visible_sprites],False)
                     Dog((x,y),[self.player_sprites, self.visible_sprites], self.visible_sprites)
                 if col == 'c':
-                    Road((x,y),[self.visible_sprites],True)
+                    # Road((x,y),[self.visible_sprites],True)
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':
                     print(x,y)

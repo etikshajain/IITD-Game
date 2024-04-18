@@ -225,7 +225,7 @@ class Player(pygame.sprite.Sprite):
                 self.hurting=True
             
             # check coin hit
-            if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False:
+            if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
                 self.coins+=COIN_VALUE
                 self.visible_sprites.remove(sprite)
                 self.player_sprites.remove(sprite)
