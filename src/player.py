@@ -48,7 +48,6 @@ class Player(pygame.sprite.Sprite):
         # level stats
         self.level = 1
         self.next_checkpoint = CHECKPOINTS[self.level-1]
-        self.ending_point = ENDING_POINT
 
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = visible_sprites
@@ -257,7 +256,7 @@ class Player(pygame.sprite.Sprite):
                 x2,y2 = sprite.rect.center
                 d2 = max(sprite.rect.width,sprite.rect.height)
                 d3 = (((x1-x2)**2)+((y1-y2)**2))**0.5
-                if d3<=(d1+d2)//2 + 20:
+                if d3<=(d1+d2)//2 + 30:
                     if self.yulu==False:
                         sprite_ = sprite
                     else:

@@ -37,6 +37,14 @@ class UI:
 		self.display_surface.blit(text_surf,text_rect)
 		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 	
+	def display_message(self,exp,x,y, ui_bg):
+		text_surf = self.font.render(str((exp)),False,TEXT_COLOR)
+		text_rect = text_surf.get_rect(center = (x,y))
+
+		pygame.draw.rect(self.display_surface,ui_bg,text_rect.inflate(20,20))
+		self.display_surface.blit(text_surf,text_rect)
+		pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
+	
 
 	def show_coins(self,txt,x,y):
 		text_surf = self.font.render(txt,False,'black')
@@ -65,7 +73,8 @@ class UI:
 				self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR_LIGHT)
 		else:
 			self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR)
-		self.show_text(str(MESSGAES[int(player.level)-1]), WIDTH//2, 40, UI_BG_COLOR)
+
+		self.display_message(str(MESSGAES[int(player.level)-1]), WIDTH//2, 40, UI_BG_COLOR)
 	
 	def display_time(self, timer):
 		if timer<=TIMER_BLINK_THRESHOLD:
