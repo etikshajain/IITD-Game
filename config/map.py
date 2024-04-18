@@ -4,6 +4,10 @@ HEIGTH   = 848
 FPS      = 60
 TILESIZE = 64
 
+# sprite
+PLAYER_SPRITE_SHEET = './assets/map_mode/player/player.png'
+YULU_SPRITE_SHEET = './assets/map_mode/player/yulu.png'
+
 # player details
 SPEED=4
 YULU_SPEED=6

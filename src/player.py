@@ -6,7 +6,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self,pos,groups, obstacle_sprites, visible_sprites, player_sprites):
         super().__init__(groups)
         self.name = 'player'
-        self.image = pygame.image.load('./assets/map_mode/player/player_40.jpg').convert_alpha()
+        self.sprite_sheet = pygame.image.load(PLAYER_SPRITE_SHEET).convert_alpha()
+        temp_img = self.sprite_sheet.subsurface(0, 0, 400, 600)
+        self.image = pygame.transform.scale(temp_img, (50,50))
         self.rect = self.image.get_rect(topleft = pos)
         self.display_surface = pygame.display.get_surface()
         self.half_width = self.display_surface.get_size()[0] // 2
@@ -58,14 +60,42 @@ class Player(pygame.sprite.Sprite):
         self.completed=False
     
     def import_player_assets(self):
-        character_path = './assets/map_mode/player/'
+        sprite_sheet_player = pygame.image.load(PLAYER_SPRITE_SHEET).convert_alpha()
+        sprite_sheet_yulu = pygame.image.load(YULU_SPRITE_SHEET).convert_alpha()
+        self.animations_indices = {'up': 3,'down': 0,'left': 2,'right': 1,
+			'right_idle':1,'left_idle':2,'up_idle':3,'down_idle':0,
+			'right_yulu':3,'left_yulu':1,'up_yulu':2,'down_yulu':0}
         self.animations = {'up': [],'down': [],'left': [],'right': [],
 			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
 			'right_yulu':[],'left_yulu':[],'up_yulu':[],'down_yulu':[]}
 
         for animation in self.animations.keys():
-            full_path = character_path + animation
-            self.animations[animation] = import_folder(full_path)
+            if 'idle' in animation:
+                x=1
+                y=self.animations_indices[animation]
+                temp_img = sprite_sheet_player.subsurface(x*450, y*600, 450, 600)
+                temp_img = pygame.transform.scale(temp_img, (50,50))
+                self.animations[animation] = [temp_img]
+            elif 'yulu' in animation:
+                x=0
+                y=self.animations_indices[animation]
+                list = []
+                for i in range(5):
+                    temp_img = sprite_sheet_yulu.subsurface(x*32, y*32, 32, 32)
+                    temp_img = pygame.transform.scale(temp_img, (50,50))
+                    list.append(temp_img)
+                    x+=1
+                self.animations[animation] = list
+            else:
+                x=0
+                y=self.animations_indices[animation]
+                list = []
+                for i in range(4):
+                    temp_img = sprite_sheet_player.subsurface(x*450, y*600, 450, 600)
+                    temp_img = pygame.transform.scale(temp_img, (50,50))
+                    list.append(temp_img)
+                    x+=1
+                self.animations[animation] = list
     
     def check_game_status(self):
         if self.energy==0 or self.coins<0 or self.stats['yulu_bill']>self.coins:
