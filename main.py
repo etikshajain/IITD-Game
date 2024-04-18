@@ -21,7 +21,7 @@ class Game:
           
         # general setup
         pygame.init()
-        mixer.init()
+        mixer.init(44100, -16, 1, 2048)
         self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
         pygame.display.set_caption('IIT Delhi')
         self.clock = pygame.time.Clock()
@@ -54,6 +54,15 @@ class Game:
         
     
     def run(self):
+        # pygame.mixer.music.load(MAPMODE_BACKGROUND_AUDIO)
+        # pygame.mixer.music.set_volume(0.5)
+        # pygame.mixer.music.play(-1, 0.0, 5000)
+        grass = pygame.mixer.Sound(GRASS_AUDIO)
+        grass.set_volume(0.6)
+        yulu_ride = pygame.mixer.Sound(YULU_RIDE_AUDIO)
+        yulu_ride.set_volume(0.8)
+
+        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -73,7 +82,6 @@ class Game:
                     self.start_button.draw()
 
                 elif self.player.failed:
-                    print("show failed screen")
                     # self.display_text(f'UhOhhhh!! You Lost!!',200)
                     self.quit_button.draw()
                 
@@ -88,6 +96,10 @@ class Game:
                     self.ui.display(self.player)
                     self.ui.display_time(self.timer)
                     self.visible_sprites.update()
+                    if self.player.yulu:
+                        yulu_ride.play()
+                    elif self.player.grass:
+                        grass.play()
             
             else:
                 self.complete=True

@@ -8,12 +8,24 @@ TILESIZE = 64
 PLAYER_SPRITE_SHEET = './assets/map_mode/player/player.png'
 YULU_SPRITE_SHEET = './assets/map_mode/player/yulu.png'
 
+# sound
+MAPMODE_BACKGROUND_AUDIO = "assets/map_mode/audio/animals.mp3"
+GRASS_AUDIO = "assets/map_mode/audio/grass.wav"
+YULU_RIDE_AUDIO = "assets/map_mode/audio/yulu.mp3"
+COIN_PICK_AUDIO = "assets/map_mode/audio/coin.mp3"
+DOG_HIT_AUDIO = "assets/map_mode/audio/dog.mp3"
+YULU_SIT_AUDIO = "assets/map_mode/audio/sit.mp3"
+EAT_AUDIO = "assets/map_mode/audio/eat.mp3"
+TASK_DONE_AUDIO = "assets/map_mode/audio/task.mp3"
+COMPLETE_AUDIO = "assets/map_mode/audio/complete.mp3"
+FAIL_AUDIO = "assets/map_mode/audio/fail.mp3"
+
 # player details
 SPEED=4
 YULU_SPEED=6
 GRASS_SPEED=2
 
-ENERGY_RATE=0.01
+ENERGY_RATE=10
 YULU_ENERGY_RATE=0.01
 YULU_BLINK_THRESHOLD=400
 GRASS_ENERGY_RATE=0.01

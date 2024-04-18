@@ -58,6 +58,22 @@ class Player(pygame.sprite.Sprite):
         # game status - failed, completed
         self.failed=False
         self.completed=False
+
+        #music
+        self.coin_pick = pygame.mixer.Sound(COIN_PICK_AUDIO)
+        self.coin_pick.set_volume(1.0)
+        self.dog_hit = pygame.mixer.Sound(DOG_HIT_AUDIO)
+        self.dog_hit.set_volume(0.8)
+        self.yulu_sit = pygame.mixer.Sound(YULU_SIT_AUDIO)
+        self.yulu_sit.set_volume(0.8)
+        self.eat = pygame.mixer.Sound(EAT_AUDIO)
+        self.eat.set_volume(0.8)
+        self.task_done = pygame.mixer.Sound(TASK_DONE_AUDIO)
+        self.task_done.set_volume(0.8)
+        self.complete = pygame.mixer.Sound(COMPLETE_AUDIO)
+        self.complete.set_volume(0.8)
+        self.mission_fail = pygame.mixer.Sound(FAIL_AUDIO)
+        self.mission_fail.set_volume(0.8)
     
     def import_player_assets(self):
         sprite_sheet_player = pygame.image.load(PLAYER_SPRITE_SHEET).convert_alpha()
@@ -99,6 +115,7 @@ class Player(pygame.sprite.Sprite):
     
     def check_game_status(self):
         if self.energy==0 or self.coins<0 or self.stats['yulu_bill']>self.coins:
+            self.mission_fail.play()
             self.failed=True
             return
         
@@ -165,6 +182,7 @@ class Player(pygame.sprite.Sprite):
             #check if you're at yulu stand
             if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
                 if self.yulu==False:
+                    self.yulu_sit.play()
                     self.yulu=True
                     return
 
@@ -173,6 +191,7 @@ class Player(pygame.sprite.Sprite):
             #check if you're at yulu stand
             if self.closest_sprite is not None and self.closest_sprite.name=='yulu_stand':
                 if self.yulu==True:
+                    self.yulu_sit.play()
                     self.yulu=False
                     self.coins-=self.stats['yulu_bill']
                     self.stats['yulu_bill']=0
@@ -182,6 +201,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_h] and self.eating==False:
             #check if you're at yulu stand
             if self.closest_sprite is not None and self.closest_sprite.name=='hospital':
+                self.eat.play()
                 self.last_eating_time = pygame.time.get_ticks()
                 self.eating=True
                 self.coins = max(0,self.coins-int(HOSPITAL_FEES))
@@ -192,6 +212,7 @@ class Player(pygame.sprite.Sprite):
             #check if you're at food stall
             if self.closest_sprite is not None:
                 if self.closest_sprite.name=='rajdhani' or self.closest_sprite.name=='amul' or self.closest_sprite.name=='shop':
+                    self.eat.play()
                     self.last_eating_time = pygame.time.get_ticks()
                     self.eating=True
                     self.coins = max(0,self.coins-int(FOOD_FEES))
@@ -206,7 +227,9 @@ class Player(pygame.sprite.Sprite):
                     self.level+=1
                     if self.level==len(CHECKPOINTS)+1:
                         self.completed=True
+                        self.complete.play()
                     else:
+                        self.task_done.play()
                         self.next_checkpoint=CHECKPOINTS[self.level-1]
     
     def cooldowns(self):
@@ -253,12 +276,14 @@ class Player(pygame.sprite.Sprite):
                 self.energy = max(0,self.energy-DOG_BITE_ENERGY)
                 self.dog_attack_time = pygame.time.get_ticks()
                 self.hurting=True
+                self.dog_hit.play()
             
             # check coin hit
             if sprite.name=='coin' and sprite.rect.colliderect(self.rect) and self.hurting==False and self.yulu==False:
                 self.coins+=COIN_VALUE
                 self.visible_sprites.remove(sprite)
                 self.player_sprites.remove(sprite)
+                self.coin_pick.play()
 
 
         if c==0:
