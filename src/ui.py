@@ -53,11 +53,18 @@ class UI:
 				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR_LIGHT)
 		else:
 			self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
+		
+		if timer<=TIMER_BLINK_THRESHOLD:
+			if wave_value()>0:
+				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+			else:
+				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
+		else:
+			self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 
 		self.show_coins(str(round(player.coins,0)))
 
 		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40, UI_BG_COLOR)
-		self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 
 		yulu = round(player.stats['yulu_bill'],0)
 		if player.coins - yulu <= YULU_BLINK_THRESHOLD and player.yulu==True:

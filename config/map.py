@@ -44,7 +44,8 @@ HIGHLIGHT_COLOR='yellow'
 CHECKPOINT_COLOR='blue'
 
 
-TOTAL_TIMER=500
+TOTAL_TIMER=5000
+TIMER_BLINK_THRESHOLD=500
 ENDING_POINT = 'guesthouse'
 CHECKPOINTS = ['hostel1', 'lib', 'cycle_shop', 'guesthouse']
 MESSGAES = ['TASK 1', 'TASK 2', 'TASK 3', 'TASK 4']
