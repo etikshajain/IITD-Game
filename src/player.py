@@ -250,7 +250,7 @@ class Player(pygame.sprite.Sprite):
                 pygame.draw.rect(self.display_surface,CHECKPOINT_COLOR,rect_highligh,5)
 
             # check if the sprite is near the player
-            if self.grass==False and sprite.name != "tree":
+            if self.grass==False and sprite.name != "tree" and sprite.name != 'landmark':
                 # check if the distance is <= 50px
                 x1,y1 = self.rect.center
                 d1 = max(self.rect.width,self.rect.height)
@@ -291,9 +291,9 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.check_game_status()
+        self.score=self.energy*10+self.coins
         if self.failed==False and self.completed==False:
             # update the score of the player
-            self.score=self.energy*10+self.coins
             self.check_proximity()
             self.input()
             self.cooldowns()

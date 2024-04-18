@@ -12,6 +12,6 @@ class Landmark(pygame.sprite.Sprite):
 		while text_width > TILESIZE or text_height > TILESIZE:
 			font = pygame.font.SysFont(None, font.get_height() - 1)
 			text_width, text_height = font.size(text)
-		self.text_surface = font.render(text, True, 'black')
+		self.text_surface = font.render(text, True, 'white')
 		self.rect = self.text_surface.get_rect(topleft = pos)
-		pygame.draw.rect(self.display_surface,UI_BG_COLOR,self.rect.inflate(20,20))
+		# pygame.draw.rect(self.display_surface,UI_BG_COLOR,self.rect.inflate(20,20))

@@ -73,20 +73,23 @@ class Game:
                     self.display_text(f'UhOhhhh!! You Lost!!')
                     self.quit_button.draw()
                 
-                elif self.player.completed:
+                elif self.player.completed==True:
+                    self.timer-=1
                     self.display_text(f'Amazing!! You completed before time!!!!')
+                    self.ui.display_time(self.timer)
 
-                if self.playing:
+                elif self.playing:
                     # update and draw the game
                     self.timer-=1
                     self.visible_sprites.custom_draw(self.player)
                     self.player_sprites.custom_draw(self.player)
+                    self.ui.display(self.player)
+                    self.ui.display_time(self.timer)
                     self.visible_sprites.update()
-                    self.ui.display(self.player, self.timer)
             
             else:
                 self.complete=True
-                if self.player.failed==False and self.playing:
+                if self.player.failed==False:
                     self.player_alive=True
                     print("move to battle area")
                 
@@ -102,8 +105,8 @@ class Game:
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
-                # if col.isdigit():
-                #     Landmark((x,y),[self.visible_sprites,self.obstacle_sprites], HOSTELS[int(col)])
+                if col.isdigit():
+                    Landmark((x,y),[self.visible_sprites,self.obstacle_sprites], HOSTELS[int(col)])
                 if col == 'h':
                     Road((x,y),[self.visible_sprites],False)
                 if col == 'v':
@@ -223,8 +226,15 @@ class YSortCameraGroup(pygame.sprite.Group):
         # debug(player.rect.centerx+self.offset.x)
         debug(self.offset)
         for sprite in self.sprites():
-            offset_pos = sprite.rect.topleft - self.offset
-            self.display_surface.blit(sprite.image, offset_pos)
+            if sprite.name!='landmark':
+                offset_pos = sprite.rect.topleft - self.offset
+                self.display_surface.blit(sprite.image, offset_pos)
+            else:
+                offset_pos = sprite.rect.topleft - self.offset
+                sprite.rectt = sprite.text_surface.get_rect(topleft = offset_pos)
+                pygame.draw.rect(self.display_surface,UI_BG_COLOR,sprite.rectt)
+                self.display_surface.blit(sprite.text_surface,sprite.rectt)
+                pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,sprite.rectt,1)
 
 if __name__ == '__main__':
     game = Game()

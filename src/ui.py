@@ -43,7 +43,7 @@ class UI:
 		text_rect = text_surf.get_rect(topleft = (x,y))
 		self.display_surface.blit(text_surf,text_rect)
 
-	def display(self,player, timer):
+	def display(self,player):
 		if player.energy<=ENERGY_BLINK_THRESHOLD:
 			if wave_value()>0:
 				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
@@ -51,14 +51,6 @@ class UI:
 				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR_LIGHT)
 		else:
 			self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
-		
-		if timer<=TIMER_BLINK_THRESHOLD:
-			if wave_value()>0:
-				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
-			else:
-				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
-		else:
-			self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
 
 		self.show_coins(str('Coins:'+str(round(player.coins,0))),10,40)
 		self.show_coins(str('Score:'+str(round(player.score,0))),10,80)
@@ -74,3 +66,12 @@ class UI:
 		else:
 			self.show_text('Yulu Bill:'+str(yulu), self.display_surface.get_size()[0] - 20, self.display_surface.get_size()[1] - 20, UI_BG_COLOR)
 		self.show_text(str(MESSGAES[int(player.level)-1]), WIDTH//2, 40, UI_BG_COLOR)
+	
+	def display_time(self, timer):
+		if timer<=TIMER_BLINK_THRESHOLD:
+			if wave_value()>0:
+				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
+			else:
+				self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR_LIGHT)
+		else:
+			self.show_text('Timer: '+str(timer), self.display_surface.get_size()[0] - 20, 90, UI_BG_COLOR)
