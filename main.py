@@ -15,6 +15,7 @@ from src.debug import debug
 from server.network import Network
 from config.main import *
 from config.fighter import MIN_SCORE,MAX_SCORE,MIN_SWORD_DAMAGE,MAX_SWORD_DAMAGE
+from config.fighter import DAMAGE_SCALE_FACTOR
 
 class Game:
     def __init__(self):
@@ -244,9 +245,9 @@ if __name__ == '__main__':
             bg_image = pygame.image.load("assets/waiting_bg.png").convert_alpha()
             scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
             screen.blit(scaled_bg, (0, 0))
-            game.display_text(f'The round 1 is for you now',200,'white')
-            game.display_text(f'Waiting for your partner to the finish round 1',300,'white')
-            game.display_text(f'The score: {round(score)}',400,'white')
+            game.display_text(f'The round 1 is over for you now',200,'white')
+            game.display_text(f'Waiting for your opponent to the finish the round 1',300,'white')
+            game.display_text(f'Your score: {round(score)}',400,'white')
             pygame.display.update()
             game.clock.tick(FPS)
             for event in pygame.event.get():
@@ -325,11 +326,10 @@ if __name__ == '__main__':
         fighter_2 = n.send(fighter_1) # send data to server
     
         #check for blocked_attack
-        if fighter_2 is not None:
-            if fighter_1.attack_blocked == True or fighter_2.attack_blocked == True:
-                sword_clash.play()
-                fighter_1.attack_blocked = False
-                fighter_2.attack_blocked = False
+        if fighter_1.attack_blocked == True or fighter_2.attack_blocked == True:
+            sword_clash.play()
+            fighter_1.attack_blocked = False
+            fighter_2.attack_blocked = False
 
         #show health stats
         if fighter_1.pid == 1:
@@ -354,16 +354,19 @@ if __name__ == '__main__':
                 intro_count -= 1
                 last_count_update = pygame.time.get_ticks()
     
-        if fighter_2.hit == True and fighter_1.attacked_opo == True:
+        if fighter_2.hit == True and fighter_1.attacked_opo > 0 :
             # print(fighter_1.pid, "hit completed")
-            fighter_1.attacked_opo = False
+            fighter_1.attacked_opo = 0
             sword_attack.play()
 
-        if fighter_2.attacked_opo and fighter_1.hit == False:
+        if fighter_2.attacked_opo>0 and fighter_1.hit == False:
             # print(fighter_1.pid, "hit ack")
             sword_attack.play()
             fighter_1.hit = True
-            fighter_1.health -= fighter_2.sword_power
+            if fighter_2.attacked_opo == 1: # light attack
+                fighter_1.health -= fighter_2.sword_power
+            if fighter_2.attacked_opo == 2: # heavy attack
+                fighter_1.health -= DAMAGE_SCALE_FACTOR*fighter_2.sword_power
     
         #update fighters
         fighter_1.update()

@@ -19,9 +19,10 @@ class Fighter():
     self.jump = False
     self.sword_power = 0
     self.attacking = False
-    self.attacked_opo = False
+    self.attacked_opo = 0 # 0:nothing 1:light_attack 2:heavy_attack
     self.attack_type = 0
-    self.attack_cooldown = 0
+    self.light_attack_cooldown = 0
+    self.heavy_attack_cooldown = 0
     self.blocking= False
     self.block_cooldown = 0
     self.attack_blocked = False
@@ -51,12 +52,12 @@ class Fighter():
         self.jump = True
       #attack
       if key[pygame.K_z] or key[pygame.K_c]:
-        self.attack(target)
         #determine attack type
         if key[pygame.K_c]:
-          self.attack_type = 1
+          self.attack_type = 1 #light attack
         if key[pygame.K_z]:
-          self.attack_type = 2
+          self.attack_type = 2 #heavy attack
+        self.attack(target)
       #block
       if key[pygame.K_x]: 
         self.block(target)
@@ -83,8 +84,10 @@ class Fighter():
         self.flip = True
 
     #attack cooldown
-    if self.attack_cooldown > 0:
-      self.attack_cooldown -= 1
+    if self.light_attack_cooldown > 0:
+      self.light_attack_cooldown -= 1
+    if self.heavy_attack_cooldown > 0:
+      self.heavy_attack_cooldown -= 1
     #block cooldown
     if self.block_cooldown >0:
       self.block_cooldown-=1
@@ -129,9 +132,12 @@ class Fighter():
       else:
         self.frame_index = 0
         #check if an attack was executed
-        if self.action == 3 or self.action == 4:
+        if self.action == 3: #light attack
           self.attacking = False
-          self.attack_cooldown = ATTACK_COOLDOWN
+          self.light_attack_cooldown = LIGHT_ATTACK_COOLDOWN
+        if self.action == 4: #heavy attack
+          self.attacking = False
+          self.heavy_attack_cooldown = HEAVY_ATTACK_COOLDOWN
         #check if the player blocked the move
         if self.action == 6:
           self.blocking= False
@@ -141,11 +147,12 @@ class Fighter():
           self.hit = False
           #if the player was in the middle of an attack, then the attack is stopped
           self.attacking = False
-          self.attack_cooldown = ATTACK_COOLDOWN
+          self.light_attack_cooldown = LIGHT_ATTACK_COOLDOWN
+          self.heavy_attack_cooldown = HEAVY_ATTACK_COOLDOWN
 
   def attack(self, target):
-    if self.attack_cooldown == 0:
-      #execute attack
+    print("attack")
+    if self.light_attack_cooldown == 0 or self.heavy_attack_cooldown==0:
       self.attacking = True
       attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
       if attacking_rect.colliderect(target.rect):
@@ -154,7 +161,10 @@ class Fighter():
         if target.blocking == True:
           self.attack_blocked = True
         else:
-          self.attacked_opo = True
+          if self.attack_type==1:
+            self.attacked_opo = 1
+          elif self.attack_type==2:
+            self.attacked_opo = 2
 
   def block(self,target):
       if self.block_cooldown == 0:
