@@ -51,7 +51,7 @@ class UI:
 		text_rect = text_surf.get_rect(topleft = (x,y))
 		self.display_surface.blit(text_surf,text_rect)
 
-	def display(self,player):
+	def display(self,player,timer):
 		if player.energy<=ENERGY_BLINK_THRESHOLD:
 			if wave_value()>0:
 				self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
@@ -61,7 +61,7 @@ class UI:
 			self.show_bar(player.energy,player.stats['energy'],ENERGY_COLOR)
 
 		self.show_coins(str('Coins:'+str(round(player.coins,0))),10,40)
-		self.show_coins(str('Score:'+str(round(player.score,0))),10,80)
+		self.show_coins(str('Score:'+str(round(player.score+timer,0))),10,80)
 
 		self.show_text('Level:'+str(player.level), self.display_surface.get_size()[0] - 20, 40, UI_BG_COLOR)
 

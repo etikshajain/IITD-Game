@@ -43,7 +43,7 @@ class Game:
         self.complete=False
 
         #button
-        self.start_button = Button(WIDTH//2, 300, 200, 50, "Start", 'black', self.start_game)
+        self.start_button = Button(WIDTH//2, 450, 200, 50, "Start", 'black', self.start_game)
         self.quit_button = Button(WIDTH//2, 400, 200, 50, "Quit", 'black', self.quit_game)
 
         #user interface
@@ -76,12 +76,16 @@ class Game:
                 self.screen.fill('#9be650')
                 if self.playing==False:
                     # start screen
-                    self.display_text(f'Welcome to IITD Poltu!!',200)
+                    bg_image = pygame.image.load("assets/intro_bg.webp").convert_alpha()
+                    scaled_bg = pygame.transform.scale(bg_image, (WIDTH, HEIGTH))
+                    self.screen.blit(scaled_bg, (0, 0))
+                    self.display_text(f'Welcome to IITD Poltu!!',300,'black')
                     self.start_button.draw()
 
                 elif self.player.failed:
                     # self.display_text(f'UhOhhhh!! You Lost!!',200)
-                    self.quit_button.draw()
+                    return self.player.score + self.timer
+                    # self.quit_button.draw()
                 
                 elif self.player.completed==True:
                     return self.player.score + self.timer
@@ -91,7 +95,7 @@ class Game:
                     self.timer-=0.01
                     self.visible_sprites.custom_draw(self.player)
                     self.player_sprites.custom_draw(self.player)
-                    self.ui.display(self.player)
+                    self.ui.display(self.player,self.timer)
                     self.ui.display_time(self.timer)
                     self.visible_sprites.update()
                     if self.player.yulu:
@@ -103,7 +107,7 @@ class Game:
                 self.complete=True
                 if self.player.failed==False:
                     self.player_alive=True
-                    return self.player.score
+                    return self.player.score + self.timer
                 
 
             pygame.display.update()
@@ -173,12 +177,11 @@ class Game:
                 if col == 'c':
                     Coin((x,y),[self.player_sprites, self.visible_sprites])
                 if col == 'p':
-                    print(x,y)
                     self.player = Player((x,y),[self.player_sprites, self.visible_sprites], self.obstacle_sprites, self.visible_sprites, self.player_sprites)
 
 
-    def display_text(self, text, ycoord):
-        text_surf = pygame.font.Font(UI_FONT,30).render(str((text)),False,'black')
+    def display_text(self, text, ycoord,color):
+        text_surf = pygame.font.Font(UI_FONT,30).render(str((text)),False,color)
         text_rect = text_surf.get_rect(center = (WIDTH/2,ycoord))
         # pygame.draw.rect(self.display_surface,UI_BG_COLOR,text_rect.inflate(20,20))
         self.display_surface.blit(text_surf,text_rect)
@@ -224,14 +227,19 @@ if __name__ == '__main__':
     n = Network()
     fighter_1 = n.getPlayer() # connect via socket
     fighter_1.sword_power = MIN_SWORD_DAMAGE + ((score-MIN_SCORE)*(MAX_SWORD_DAMAGE-MIN_SWORD_DAMAGE)/(MAX_SCORE-MIN_SCORE))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Waiting")
     while True:
         fighter_2 = n.send(fighter_1)
         if fighter_2 is not None:
             break
         else:
-            game.display_text(f'Amazing!! You completed Early!!',200)
-            game.display_text(f'but your partner started late :)',300)
-            game.display_text(f'waiting for him/her to finish the round 1',400)
+            bg_image = pygame.image.load("assets/waiting_bg.png").convert_alpha()
+            scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+            screen.blit(scaled_bg, (0, 0))
+            game.display_text(f'The round 1 is for you now',200,'white')
+            game.display_text(f'Waiting for your partner to the finish round 1',300,'white')
+            game.display_text(f'The score: {round(score)}',400,'white')
             pygame.display.update()
             game.clock.tick(FPS)
             for event in pygame.event.get():
@@ -239,7 +247,6 @@ if __name__ == '__main__':
                     pygame.quit()
                     sys.exit()
     
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Brawl mode")
     clock = pygame.time.Clock()
 

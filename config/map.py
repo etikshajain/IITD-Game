@@ -35,7 +35,7 @@ YULU_BILL=0.05
 
 STARTING_COINS=500
 COIN_VALUE=50
-HOSPITAL_FEES=100
+HOSPITAL_FEES=40
 FOOD_FEES=10
 
 DOG_BITE_ENERGY=5
@@ -62,9 +62,14 @@ CHECKPOINT_COLOR='blue'
 
 TOTAL_TIMER=200
 TIMER_BLINK_THRESHOLD=30
-CHECKPOINTS = ['sac', 'lhc', 'hostel1', 'racing', 'hostel12', 'bank', 'guesthouse', 'main_building']
-MESSGAES = ['Go to SAC to see how the Insti works', 'Go to LHC to File your Election Nomination', 'Go to Jwala to form Alliance', 'Go to racing ground to hold a public meeting', 'Go to Himadri to eavesdrop on opposition strategies', 'Withdraw money from the bank to organise rally', 'Hide in the guesthouse for some time', 'Reach main building for the final elections!!']
-POINTS = [100, 100, 100, 100, 100, 100, 100, 100]
+# CHECKPOINTS = ['sac', 'lhc', 'hostel1', 'racing', 'hostel12', 'bank', 'guesthouse', 'main_building']
+# MESSGAES = ['Go to SAC to see how the Insti works', 'Go to LHC to File your Election Nomination', 'Go to Jwala to form Alliance', 'Go to racing ground to hold a public meeting', 'Go to Himadri to eavesdrop on opposition strategies', 'Withdraw money from the bank to organise rally', 'Hide in the guesthouse for some time', 'Reach main building for the final elections!!']
+# POINTS = [100, 100, 100, 100, 100, 100, 100, 100]
+
+# for demo purposes only 
+CHECKPOINTS = ['hostel1']
+MESSGAES = ['Go to Jwala to form Alliance']
+POINTS = [100]
 
 HOSTELS = {
     1:'Jwala',
