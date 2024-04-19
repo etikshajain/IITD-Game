@@ -151,7 +151,6 @@ class Fighter():
           self.heavy_attack_cooldown = HEAVY_ATTACK_COOLDOWN
 
   def attack(self, target):
-    print("attack")
     if self.light_attack_cooldown == 0 or self.heavy_attack_cooldown==0:
       self.attacking = True
       attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
