@@ -265,6 +265,11 @@ if __name__ == '__main__':
 
     bg_image = pygame.image.load(VSMODE_BACKGROUND).convert_alpha()
     count_font = pygame.font.Font(COUNTDOWN_FONT, 80)
+    
+    winner_img = pygame.image.load("assets/vs_mode/gui/winner.png").convert_alpha()
+    winner_img = pygame.transform.scale(winner_img, (200, 150))
+    loser_img = pygame.image.load("assets/vs_mode/gui/loser.png").convert_alpha()
+    loser_img = pygame.transform.scale(loser_img, (200, 150))
 
     #function for drawing text
     def draw_text(text, font, text_col, x, y):
@@ -281,7 +286,7 @@ if __name__ == '__main__':
         ratio = health / 100
         pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
         pygame.draw.rect(screen, RED, (x, y, 400, 30))
-        pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
+        pygame.draw.rect(screen, GREEN, (x, y, 400 * ratio, 30))
 
     def load_images(sprite_sheet, animation_steps):
     #extract images from spritesheet
@@ -360,6 +365,12 @@ if __name__ == '__main__':
         if (not round_over):
             if (not fighter_1.alive) or (not fighter_2.alive) :
                 round_over = True
+        else:
+            pygame.mixer.music.stop()
+            if fighter_1.alive:
+                screen.blit(winner_img, (600, 100))
+            else:
+                screen.blit(loser_img, (600, 100))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
