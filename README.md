@@ -10,13 +10,11 @@ COP290 Sem-ll 2024 A2 ST2 - Game Dev
 ```
 ./scripts/run_server.sh wifi
 ```
+This will print the ip address of the server. Now we need to join the game at this ip address.
 
 # Joining the game
-- On localhost
+Run the following command to join the game mentioning the ip address of the server and the alias of the player.
+
 ```
-./scripts/run_game.sh
-```
-- On the wifi network
-```
-./scripts/run_game.sh wifi
+./scripts/run_game.sh ip_address alias_of_the_player
 ```

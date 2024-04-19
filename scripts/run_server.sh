@@ -7,5 +7,5 @@ if [ "$1" = "wifi" ]; then
 fi
 sed -i '' "s/IP_ADDR = .*/IP_ADDR = \"$ipaddr\"/" config/server.py
 
-echo "Running server at IP: $ipaddr"
+echo -e "Running server at IP: \033[0;32m$ipaddr\033[0m"
 python3 server/server.py
