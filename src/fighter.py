@@ -4,6 +4,7 @@ from config.fighter import *
 class Fighter():
   def __init__(self, pid, x, y, flip, data, animation_list):
     self.pid = pid # player id
+    self.player_alias = "None"
     self.size = data[0]
     self.image_scale = data[1]
     self.offset = data[2]

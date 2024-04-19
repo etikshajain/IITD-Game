@@ -222,11 +222,18 @@ class YSortCameraGroup(pygame.sprite.Group):
                 pygame.draw.rect(self.display_surface,UI_BORDER_COLOR,sprite.rectt,1)
 
 if __name__ == '__main__':
+
+    player_name = "None"
+    if len(sys.argv) > 1:
+        player_name = sys.argv[1]
     game = Game()
     score = game.run()
+
     n = Network()
     fighter_1 = n.getPlayer() # connect via socket
     fighter_1.sword_power = MIN_SWORD_DAMAGE + ((score-MIN_SCORE)*(MAX_SWORD_DAMAGE-MIN_SWORD_DAMAGE)/(MAX_SCORE-MIN_SCORE))
+    fighter_1.player_alias = player_name
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Waiting")
     while True:
@@ -265,7 +272,8 @@ if __name__ == '__main__':
 
     bg_image = pygame.image.load(VSMODE_BACKGROUND).convert_alpha()
     count_font = pygame.font.Font(COUNTDOWN_FONT, 80)
-    
+    score_font = pygame.font.Font(COUNTDOWN_FONT, 30)
+
     winner_img = pygame.image.load("assets/vs_mode/gui/winner.png").convert_alpha()
     winner_img = pygame.transform.scale(winner_img, (200, 150))
     loser_img = pygame.image.load("assets/vs_mode/gui/loser.png").convert_alpha()
@@ -327,9 +335,13 @@ if __name__ == '__main__':
         if fighter_1.pid == 1:
             draw_health_bar(fighter_1.health, HEALTH_BAR_X_OFFSET, HEALTH_BAR_Y_OFFSET)
             draw_health_bar(fighter_2.health, SCREEN_WIDTH - 404 - HEALTH_BAR_X_OFFSET, HEALTH_BAR_Y_OFFSET)
+            draw_text("P1: " + fighter_1.player_alias, score_font, YELLOW, 20, 60)
+            draw_text("P2: " + fighter_2.player_alias, score_font, YELLOW, SCREEN_WIDTH - 404 - HEALTH_BAR_X_OFFSET, 60)
         else:
             draw_health_bar(fighter_1.health, SCREEN_WIDTH - 404 - HEALTH_BAR_X_OFFSET, HEALTH_BAR_Y_OFFSET)
             draw_health_bar(fighter_2.health, HEALTH_BAR_X_OFFSET, HEALTH_BAR_Y_OFFSET)
+            draw_text("P1: " + fighter_2.player_alias, score_font, YELLOW, 20, 60)
+            draw_text("P2: " + fighter_1.player_alias, score_font, YELLOW, SCREEN_WIDTH - 404 - HEALTH_BAR_X_OFFSET, 60)
 
         #update countdown
         if intro_count <= 0 and (not round_over): #move player
